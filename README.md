@@ -106,7 +106,6 @@ The JSON file must look like this:
     "boat rental in javea",
     "boat rental in ibiza",
     "boat rental in menorca",
-    ...
 ]
 ```
 
