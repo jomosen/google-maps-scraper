@@ -65,6 +65,8 @@ To run the scraper, you need to download Chromedriver and place it in your proje
 
 If placed in the project root, the scraper will automatically detect and launch it.
 
+---
+
 ## 🧪 Running the Scraper
 
 ```bash
