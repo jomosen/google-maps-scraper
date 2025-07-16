@@ -32,6 +32,20 @@ Results are stored in a CSV file.
 
 ---
 
+## 🧩 Extensible by Design
+
+The architecture is designed to support additional scraper implementations and enrich business data with external sources.
+
+Some future plug-ins/extensions might include:
+
+- 🔍 **Email extractor**: to crawl websites and collect contact information
+- 📱 **Social media scrapers**: to retrieve public Instagram, Facebook or LinkedIn profiles
+- 🧠 **NLP or AI modules**: to classify or enrich business descriptions
+
+New modules can be injected cleanly without altering the core scraping logic, respecting the current separation of concerns.
+
+---
+
 ## ⚙️ Requirements
 
 - Python 3.10+
