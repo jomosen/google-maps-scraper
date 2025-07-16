@@ -1,1 +1,1 @@
-# googlemaps-scraper
+# google-maps-scraper
