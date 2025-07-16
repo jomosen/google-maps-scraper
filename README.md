@@ -69,9 +69,8 @@ If placed in the project root, the scraper will automatically detect and launch 
 
 ```bash
 python run_scraper.py --query "physiotherapist in javea, spain"
-
+```
 Or, specifying a language other than English: 
 
-```bash
 python run_scraper.py --query "fisioterapeuta en javea, españa" --lang "es"
 
