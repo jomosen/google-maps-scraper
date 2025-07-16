@@ -8,17 +8,18 @@ from scraper.utils import Utils
 from . import selectors
 
 class GoogleMapsScraper(BaseScraper):
-    def __init__(self, lang, query, results_storage, driver):
+    def __init__(self, lang, queries, results_storage, driver):
         super().__init__(results_storage, driver)
         self.lang = lang
-        self.query = query
+        self.queries = queries
 
     def scrape(self):
         self.load_google_maps_url()
         self.accept_cookies()
-        self.search()
-        self.load_listings()
-        self.results = self.extract_listings_data()
+        for query in self.queries:
+            self.search(query)
+            self.load_listings()
+            self.extract_listings_data()
 
     def get_google_maps_url(self):
         return f"https://www.google.com/maps?hl={self.lang}"
@@ -30,9 +31,9 @@ class GoogleMapsScraper(BaseScraper):
     def accept_cookies(self):
         self.driver.click_element_when_present(selectors.ACCEPT_COOKIES_BTN_SELECTOR)
 
-    def search(self):
-        print(f"Searching for: {self.query}")
-        self.driver.send_keys_after_waiting(selectors.SEARCH_BOX_SELECTOR, self.query)
+    def search(self, query):
+        print(f"Searching for: {query}")
+        self.driver.send_keys_after_waiting(selectors.SEARCH_BOX_SELECTOR, query)
         print("Search submitted.")
 
     def load_listings(self):
@@ -42,16 +43,14 @@ class GoogleMapsScraper(BaseScraper):
         
     def extract_listings_data(self):
         listings = self.get_listings()
-        data = []
         for i, listing in enumerate(listings):
-            row = {}
             try:
                 print(f"Clicking listing {i+1} of {len(listings)}")
-                row = self.extract_listing_data(listing)
-                data.append(row)
+                item = self.extract_listing_data(listing)
+                self.results_storage.add(item)
+                print(f"Listing {item['name']} processed successfully.")
             except Exception as e:
                 print(f"Failed to process listing {i+1}: {e}")
-        return data
     
     def get_listings(self):
         listings = self.driver.get_parents_of_elements(selectors.LISTING_ITEM_CHILD_SELECTOR)
@@ -92,8 +91,7 @@ class GoogleMapsScraper(BaseScraper):
 
             item['domain'] = Utils.extract_domain_from_url(item['website_url'])
             
-            self.results_storage.add(item)
-            print(f"Listing {item['name']} processed successfully.")
+            return item
 
         except Exception as e:
             print(f"Failed to process listing: {e}")

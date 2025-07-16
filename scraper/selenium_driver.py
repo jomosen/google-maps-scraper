@@ -110,21 +110,30 @@ class SeleniumDriver():
 
     def send_keys_after_waiting(self, selector_value, input_value):
         try:
-            input = WebDriverWait(self.driver, WAIT_TIMEOUT).until(
+            input_element = WebDriverWait(self.driver, WAIT_TIMEOUT).until(
                 EC.element_to_be_clickable((By.CSS_SELECTOR, selector_value))
             )
+
+            input_element.send_keys(Keys.CONTROL, 'a')
+            time.sleep(random.uniform(0.1, 0.2))
+            input_element.send_keys(Keys.DELETE)
+            time.sleep(random.uniform(0.1, 0.2))
+
             for char in input_value:
-                input.send_keys(char)
+                input_element.send_keys(char)
                 time.sleep(random.uniform(0.025, 0.125))
 
             time.sleep(random.uniform(0.2, 0.4))
-            input.send_keys(Keys.ENTER)
+            input_element.send_keys(Keys.ENTER)
+
         except NoSuchElementException:
             print(f"Input field with selector '{selector_value}' not found.")
         except Exception as e:
             print(f"Unexpected error while sending keys: {e}")
 
     def scroll_element_until_end(self, selector_value):
+        time.sleep(5)
+        
         element = WebDriverWait(self.driver, WAIT_TIMEOUT).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, selector_value))
         )

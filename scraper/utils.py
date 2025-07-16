@@ -23,3 +23,7 @@ class Utils:
         shuffled_list = list.copy()
         random.shuffle(shuffled_list)
         return shuffled_list
+
+    @staticmethod
+    def sanitize_filename(query):
+        return query.lower().replace(',', '').replace(' ', '_')
