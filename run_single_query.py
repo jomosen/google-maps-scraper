@@ -8,7 +8,7 @@ from scraper.utils import Utils
 
 def main():
     parser = argparse.ArgumentParser(description="Run Google Maps scraper.")
-    parser.add_argument("--query", required=True, help="Query to search (e.g. 'physiotherapist in javea')")
+    parser.add_argument("--query", required=True, help="Query to search (e.g. 'boat rental in javea')")
     parser.add_argument("--lang", default="en", help="Language (default: en)")
 
     args = parser.parse_args()

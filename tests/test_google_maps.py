@@ -16,7 +16,7 @@ def scraper_instance():
 
     selenium_driver = SeleniumDriver()
 
-    return GoogleMapsScraper(lang="es", query="physiotherapist in javea", results_storage=results_storage, driver=selenium_driver)
+    return GoogleMapsScraper(lang="en", query="boat rental in javea", results_storage=results_storage, driver=selenium_driver)
 
 def test_scraper_runs(scraper_instance):
 
