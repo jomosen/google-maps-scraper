@@ -83,11 +83,34 @@ If placed in the project root, the scraper will automatically detect and launch 
 
 ## 🧪 Running the Scraper
 
+### Single query
+
 ```bash
-python run_scraper.py --query "physiotherapist in javea, spain"
+python run_single_query.py --query "physiotherapist in javea, spain"
 ```
 Or, specifying a language other than English: 
 
 ```bash
-python run_scraper.py --query "fisioterapeuta en javea, españa" --lang "es"
+python run_single_query.py --query "fisioterapeuta en javea, españa" --lang "es"
+```
+### Batch queries
+
+```bash
+python run_batch_queries.py --json "input.json"
+```
+
+The JSON file must look like this:
+
+```json
+[
+    "boat rental in javea",
+    "boat rental in ibiza",
+    "boat rental in menorca",
+]
+```
+
+To specify a language other than English: 
+
+```bash
+python run_batch_queries.py --json "input.json" --lang "es"
 ```
