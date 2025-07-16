@@ -51,17 +51,17 @@ pip install -r requirements.txt
 
 To run the scraper, you need to download Chromedriver and place it in your project directory or somewhere in your system PATH.
 
-    Check your Chrome version at chrome://settings/help.
+    1.- Check your Chrome version at chrome://settings/help.
 
-    Go to the official Chromedriver page.
+    2.- Go to the official Chromedriver page.
 
-    Download the version that matches your Chrome.
+    3.- Download the version that matches your Chrome.
 
-    Extract the chromedriver binary and:
+    4.- Extract the chromedriver binary and:
 
-        Place it in your project root directory (recommended), or
+        - Place it in your project root directory (recommended), or
 
-        Add its path to your system’s PATH environment variable.
+        - Add its path to your system’s PATH environment variable.
 
 If placed in the project root, the scraper will automatically detect and launch it.
 
@@ -69,10 +69,9 @@ If placed in the project root, the scraper will automatically detect and launch 
 
 ```bash
 python run_scraper.py --query "physiotherapist in javea, spain"
----
 
 Or, specifying a language other than English: 
 
 ```bash
 python run_scraper.py --query "fisioterapeuta en javea, españa" --lang "es"
----
+
