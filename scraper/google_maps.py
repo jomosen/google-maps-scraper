@@ -2,6 +2,7 @@ import time
 import re
 import json
 import unicodedata
+import html
 
 from scraper.base import BaseScraper
 from scraper.utils import Utils
@@ -19,7 +20,7 @@ class GoogleMapsScraper(BaseScraper):
         for query in self.queries:
             self.search(query)
             self.load_listings()
-            self.extract_listings_data()
+            self.extract_listings_data(query)
 
     def get_google_maps_url(self):
         return f"https://www.google.com/maps?hl={self.lang}"
@@ -41,14 +42,12 @@ class GoogleMapsScraper(BaseScraper):
         self.driver.scroll_element_until_end(selectors.SIDEBAR_CONTAINER_SELECTOR)
         print("Finished scrolling.")
         
-    def extract_listings_data(self):
+    def extract_listings_data(self, query):
         listings = self.get_listings()
         for i, listing in enumerate(listings):
             try:
                 print(f"Clicking listing {i+1} of {len(listings)}")
-                item = self.extract_listing_data(listing)
-                self.results_storage.add(item)
-                print(f"Listing {item['name']} processed successfully.")
+                self.extract_listing_data(listing, query)
             except Exception as e:
                 print(f"Failed to process listing {i+1}: {e}")
     
@@ -56,7 +55,7 @@ class GoogleMapsScraper(BaseScraper):
         listings = self.driver.get_parents_of_elements(selectors.LISTING_ITEM_CHILD_SELECTOR)
         return Utils.randomize_list_order(listings)
 
-    def extract_listing_data(self, listing):
+    def extract_listing_data(self, listing, query):
         try:
             self.driver.scroll_until_element_into_view(listing)
             detail_url = self.driver.get_element_attribute_within_parent(listing, 'a', 'href')
@@ -90,8 +89,11 @@ class GoogleMapsScraper(BaseScraper):
             item['reviews'] = self.get_reviews(detail_panel)
 
             item['domain'] = Utils.extract_domain_from_url(item['website_url'])
-            
-            return item
+
+            item['query'] = query
+
+            self.results_storage.add(item)
+            print(f"Listing {item['name']} processed successfully.")
 
         except Exception as e:
             print(f"Failed to process listing: {e}")
@@ -161,6 +163,7 @@ class GoogleMapsScraper(BaseScraper):
                     "author": self.get_review_author(review_wrapper),
                     "text": self.driver.get_element_text_within_parent(review_wrapper, f'#{review_id}'),
                     "lang": self.driver.get_element_attribute_within_parent(review_wrapper, f'#{review_id}', "lang"),
+                    "photos": self.get_review_photos(review_wrapper)
                 }
                 reviews.append(review)
             except:
@@ -188,3 +191,19 @@ class GoogleMapsScraper(BaseScraper):
         if reviewer_container:
             return reviewer_container.text
         raise Exception("No reviewer found in review.")
+    
+    def get_review_photos(self, review_wrapper):
+        photo_urls = []
+        photo_containers = self.driver.get_elements_within_parent(review_wrapper, selectors.BUSINESS_REVIEW_PHOTO_SELECTOR)
+        for photo_container in photo_containers:
+            string_containing_photo_url = photo_container.get_attribute("style")
+            photo_url = self.clean_review_photo_url(string_containing_photo_url)
+            if photo_url:
+                photo_urls.append(photo_url)
+        return json.dumps(photo_urls)
+    
+    def clean_review_photo_url(self, string_containing_photo_url):
+        match = re.search(r'url\(["\']?([^"\')]+)["\']?\)', string_containing_photo_url)
+        if match:
+            return html.unescape(match.group(1))
+        return None
