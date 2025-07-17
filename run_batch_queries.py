@@ -12,8 +12,14 @@ def main():
     parser = argparse.ArgumentParser(description="Run batch Google Maps scrapes from JSON.")
     parser.add_argument("--json", required=True, help="Path to JSON file with queries and language")
     parser.add_argument("--lang", default="en", help="Language (default: en)")
-    
+    parser.add_argument("--max_reviews", action="store_true", help="Scrape up to 50 reviews per place")
+
     args = parser.parse_args()
+
+    if args.max_reviews:
+        reviews_limit = 50
+    else:
+        reviews_limit = None
 
     with open(args.json, 'r', encoding='utf-8') as f:
         queries = json.load(f)
@@ -27,20 +33,11 @@ def main():
     timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     file_path = f"results/{timestamp}.csv"
     repository = CSVWriter(file_path)
-    results_storage = ResultsStorage(repository)
 
     selenium_driver = SeleniumDriver()
-    
-    scraper = GoogleMapsScraper(
-        lang=lang,
-        queries=queries,
-        results_storage=results_storage,
-        driver=selenium_driver
-    )
 
+    scraper = GoogleMapsScraper(lang=lang, queries=queries, repository=repository, driver=selenium_driver, max_reviews=reviews_limit)
     scraper.scrape()
-        
-    results_storage.save()
 
 if __name__ == "__main__":
     main()

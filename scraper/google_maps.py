@@ -9,10 +9,11 @@ from scraper.utils import Utils
 from . import selectors
 
 class GoogleMapsScraper(BaseScraper):
-    def __init__(self, lang, queries, results_storage, driver):
-        super().__init__(results_storage, driver)
+    def __init__(self, lang, queries, repository, driver, max_reviews=None):
+        super().__init__(repository, driver)
         self.lang = lang
         self.queries = queries
+        self.max_reviews = max_reviews
 
     def scrape(self):
         self.load_google_maps_url()
@@ -24,11 +25,10 @@ class GoogleMapsScraper(BaseScraper):
 
             if i > 0:
                 time.sleep(5)
+            i += 1
 
             self.scroll_listings()
             self.extract_listings_data(query)
-
-            i += 1
 
     def get_google_maps_url(self):
         return f"https://www.google.com/maps?hl={self.lang}"
@@ -94,13 +94,13 @@ class GoogleMapsScraper(BaseScraper):
             item['attributes'] = self.get_attributes(detail_panel)
             item['info'] = self.get_info(detail_panel)
             item['hours'] = self.get_hours(detail_panel)
-            item['reviews'] = self.get_reviews_from_reviews_tab(detail_panel)
+            item['reviews'] = self.get_reviews(detail_panel)
 
             item['domain'] = Utils.extract_domain_from_url(item['website_url'])
 
             item['query'] = query
 
-            self.results_storage.add(item)
+            self.repository.add(item)
             print(f"Listing {item['name']} processed successfully.")
 
         except Exception as e:
@@ -157,21 +157,21 @@ class GoogleMapsScraper(BaseScraper):
             if not self.driver.get_elements_within_parent(div, "div"):
                 return div.text
         return ""
+    
+    def get_reviews(self, detail_panel):
+        reviews = []
+        if self.max_reviews and self.max_reviews > 0:
+            reviews = self.get_reviews_from_reviews_tab(detail_panel)
+        else:
+            reviews = self.get_reviews_from_overview_tab(detail_panel)
+        return json.dumps(reviews)
 
     def get_reviews_from_overview_tab(self, detail_panel):
-        reviews = []
         reviews_wrappers = self.driver.get_elements_within_parent(detail_panel, selectors.BUSINESS_REVIEWS_SELECTOR)
-        for review_wrapper in reviews_wrappers:
-            try:
-                review = self.extract_review_from_wrapper(review_wrapper)
-                reviews.append(review)
-            except:
-                pass
-        return json.dumps(reviews)
+        reviews = self.extract_reviews_from_wrappers(reviews_wrappers)
+        return reviews
     
     def get_reviews_from_reviews_tab(self, detail_panel):
-        reviews = []
-
         self.driver.click_element_when_present(selectors.DETAIL_PANEL_REVIEWS_TAB_SELECTOR)
         time.sleep(1)
             
@@ -180,14 +180,23 @@ class GoogleMapsScraper(BaseScraper):
         detail_panel = self.driver.get_element(selectors.DETAIL_PANEL_SELECTOR)
         reviews_wrappers = self.driver.get_elements_within_parent(detail_panel, selectors.BUSINESS_REVIEWS_SELECTOR)
         reviews_wrappers = Utils.randomize_list_order(reviews_wrappers)
+
+        reviews = self.extract_reviews_from_wrappers(reviews_wrappers)
+        return reviews
+    
+    def extract_reviews_from_wrappers(self, reviews_wrappers):
+        reviews = []
         for review_wrapper in reviews_wrappers:
-            
             try:
                 review = self.extract_review_from_wrapper(review_wrapper)
                 reviews.append(review)
+
+                if self.max_reviews and len(reviews) >= self.max_reviews:
+                    print(f"Reached maximum reviews limit: {self.max_reviews}")
+                    break
             except:
                 pass
-        return json.dumps(reviews)
+        return reviews
     
     def extract_review_from_wrapper(self, review_wrapper):
         review_id = review_wrapper.get_attribute("data-review-id")

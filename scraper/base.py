@@ -1,6 +1,6 @@
 class BaseScraper:
-    def __init__(self, results_storage, driver):
-        self.results_storage = results_storage
+    def __init__(self, repository, driver):
+        self.repository = repository
         self.driver = driver
 
     def scrape(self):

@@ -2,9 +2,7 @@ import os
 import pytest
 
 from scraper.google_maps import GoogleMapsScraper
-from scraper.utils import Utils
 from scraper.csv_writer import CSVWriter
-from scraper.results_storage import ResultsStorage
 from scraper.selenium_driver import SeleniumDriver
 
 @pytest.fixture
@@ -12,20 +10,17 @@ def scraper_instance():
     
     test_file = "results/test_output.csv"
     repository = CSVWriter(test_file)
-    results_storage = ResultsStorage(repository)
 
     selenium_driver = SeleniumDriver()
 
-    return GoogleMapsScraper(lang="en", query="boat rental in javea", results_storage=results_storage, driver=selenium_driver)
+    return GoogleMapsScraper(lang="en", query="boat rental in javea", repository=repository, driver=selenium_driver)
 
-def test_scraper_runs(scraper_instance):
+def test_single_query(scraper_instance):
 
     scraper_instance.scrape()
 
-    results_storage = scraper_instance.results_storage
-    results_storage.save()
+    file_path = scraper_instance.repository.file_path
 
-    repository = results_storage.repository
-    assert os.path.exists(repository.file_path), f"Expected output CSV not found: {repository.file_path}"
+    assert os.path.exists(file_path), f"Expected output CSV not found: {file_path}"
 
-    os.remove(repository.file_path)
+    os.remove(file_path)
