@@ -86,31 +86,33 @@ If placed in the project root, the scraper will automatically detect and launch 
 ### Single query
 
 ```bash
-python run_single_query.py --query "physiotherapist in javea, spain"
+python run_single_query.py --query "boat rental in javea, spain"
 ```
-Or, specifying a language other than English: 
 
-```bash
-python run_single_query.py --query "fisioterapeuta en javea, españa" --lang "es"
-```
 ### Batch queries
 
 ```bash
 python run_batch_queries.py --json "input.json"
 ```
 
-The JSON file must look like this:
+The JSON file should look like this:
 
 ```json
 [
     "boat rental in javea",
-    "boat rental in ibiza",
-    "boat rental in menorca",
+    "boat rental in moraira"
 ]
 ```
 
-To specify a language other than English: 
+### Optional parameters
+*Language*: Specify a language other than English:
 
 ```bash
 python run_batch_queries.py --json "input.json" --lang "es"
+```
+
+*Reviews*: Scrape up to 50 reviews per place (instead of the default 3):
+
+```bash
+python run_batch_queries.py --json "input.json" --max_reviews
 ```
