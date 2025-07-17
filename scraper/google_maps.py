@@ -17,10 +17,18 @@ class GoogleMapsScraper(BaseScraper):
     def scrape(self):
         self.load_google_maps_url()
         self.accept_cookies()
+
+        i = 0
         for query in self.queries:
             self.search(query)
-            self.load_listings()
+
+            if i > 0:
+                time.sleep(5)
+
+            self.scroll_listings()
             self.extract_listings_data(query)
+
+            i += 1
 
     def get_google_maps_url(self):
         return f"https://www.google.com/maps?hl={self.lang}"
@@ -37,9 +45,9 @@ class GoogleMapsScraper(BaseScraper):
         self.driver.send_keys_after_waiting(selectors.SEARCH_BOX_SELECTOR, query)
         print("Search submitted.")
 
-    def load_listings(self):
+    def scroll_listings(self):
         print("Scrolling the sidebar to load all of the results...")
-        self.driver.scroll_element_until_end(selectors.SIDEBAR_CONTAINER_SELECTOR)
+        self.driver.scroll_element(selectors.SIDEBAR_CONTAINER_SELECTOR)
         print("Finished scrolling.")
         
     def extract_listings_data(self, query):
@@ -86,7 +94,7 @@ class GoogleMapsScraper(BaseScraper):
             item['attributes'] = self.get_attributes(detail_panel)
             item['info'] = self.get_info(detail_panel)
             item['hours'] = self.get_hours(detail_panel)
-            item['reviews'] = self.get_reviews(detail_panel)
+            item['reviews'] = self.get_reviews_from_reviews_tab(detail_panel)
 
             item['domain'] = Utils.extract_domain_from_url(item['website_url'])
 
@@ -150,25 +158,49 @@ class GoogleMapsScraper(BaseScraper):
                 return div.text
         return ""
 
-    def get_reviews(self, detail_panel):
+    def get_reviews_from_overview_tab(self, detail_panel):
         reviews = []
         reviews_wrappers = self.driver.get_elements_within_parent(detail_panel, selectors.BUSINESS_REVIEWS_SELECTOR)
         for review_wrapper in reviews_wrappers:
             try:
-                review_id = review_wrapper.get_attribute("data-review-id")
-                self.view_full_review(review_wrapper)
-                review = {
-                    "id": review_id,
-                    "rating": self.get_review_rating(review_wrapper),
-                    "author": self.get_review_author(review_wrapper),
-                    "text": self.driver.get_element_text_within_parent(review_wrapper, f'#{review_id}'),
-                    "lang": self.driver.get_element_attribute_within_parent(review_wrapper, f'#{review_id}', "lang"),
-                    "photos": self.get_review_photos(review_wrapper)
-                }
+                review = self.extract_review_from_wrapper(review_wrapper)
                 reviews.append(review)
             except:
                 pass
         return json.dumps(reviews)
+    
+    def get_reviews_from_reviews_tab(self, detail_panel):
+        reviews = []
+
+        self.driver.click_element_when_present(selectors.DETAIL_PANEL_REVIEWS_TAB_SELECTOR)
+        time.sleep(1)
+            
+        self.driver.scroll_element_by_xpath(selectors.DETAIL_PANEL_REVIEWS_SCROLLABLE_XPATH, 3)
+
+        detail_panel = self.driver.get_element(selectors.DETAIL_PANEL_SELECTOR)
+        reviews_wrappers = self.driver.get_elements_within_parent(detail_panel, selectors.BUSINESS_REVIEWS_SELECTOR)
+        reviews_wrappers = Utils.randomize_list_order(reviews_wrappers)
+        for review_wrapper in reviews_wrappers:
+            
+            try:
+                review = self.extract_review_from_wrapper(review_wrapper)
+                reviews.append(review)
+            except:
+                pass
+        return json.dumps(reviews)
+    
+    def extract_review_from_wrapper(self, review_wrapper):
+        review_id = review_wrapper.get_attribute("data-review-id")
+        self.view_full_review(review_wrapper)
+        review = {
+            "id": review_id,
+            "rating": self.get_review_rating(review_wrapper),
+            "author": self.get_review_author(review_wrapper),
+            "text": self.driver.get_element_text_within_parent(review_wrapper, f'#{review_id}'),
+            "lang": self.driver.get_element_attribute_within_parent(review_wrapper, f'#{review_id}', "lang"),
+            "photos": self.get_review_photos(review_wrapper)
+        }
+        return review
     
     def view_full_review(self, review_wrapper):
         view_more_action = self.driver.get_element_within_parent(review_wrapper, selectors.BUSINESS_REVIEW_VIEW_MORE_SELECTOR)

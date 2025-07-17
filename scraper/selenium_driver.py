@@ -15,10 +15,10 @@ WAIT_TIMEOUT = 10
 SCROLL_PAUSE_TIME = 1
 
 class SeleniumDriver():
-    def __init__(self):
-        self.driver = self.get_stealth_driver()
+    def __init__(self, options = Options()):
+        self.driver = self.get_stealth_driver(options)
 
-    def get_stealth_driver(self):
+    def get_stealth_driver(self, options):
         chromedriver_path = os.getenv("CHROMEDRIVER_PATH", "./chromedriver.exe")
 
         if not os.path.exists(chromedriver_path):
@@ -28,7 +28,7 @@ class SeleniumDriver():
                 "or place chromedriver.exe in the root of the project."
             )
     
-        options = Options()
+        
         
         options.add_argument("--disable-blink-features=AutomationControlled")
         options.add_experimental_option("excludeSwitches", ["enable-automation"])
@@ -131,24 +131,28 @@ class SeleniumDriver():
         except Exception as e:
             print(f"Unexpected error while sending keys: {e}")
 
-    def scroll_element_until_end(self, selector_value):
-        time.sleep(5)
-        
+    def scroll_element(self, selector_value, number_of_times=100, selector_type=By.CSS_SELECTOR):
         element = WebDriverWait(self.driver, WAIT_TIMEOUT).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, selector_value))
+            EC.presence_of_element_located((selector_type, selector_value))
         )
 
         previous_scroll_height = self.driver.execute_script("return arguments[0].scrollHeight", element)
-        while True:
+        end_reached = False
+        i = 0
+        while not end_reached and i < number_of_times:
             self.driver.execute_script("arguments[0].scrollTop = arguments[0].scrollHeight", element)
 
             time.sleep(SCROLL_PAUSE_TIME)
 
             new_scroll_height = self.driver.execute_script("return arguments[0].scrollHeight", element)
             if new_scroll_height == previous_scroll_height:
-                break
+                end_reached = True
 
             previous_scroll_height = new_scroll_height
+            i += 1
+
+    def scroll_element_by_xpath(self, xpath_value, number_of_times=100):
+        return self.scroll_element(xpath_value, number_of_times, By.XPATH)
 
     def get_parents_of_elements(self, selector_value):
         return [el.find_element(By.XPATH, "..") for el in self.driver.find_elements(By.CSS_SELECTOR, selector_value)]
