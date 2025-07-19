@@ -49,7 +49,7 @@ New modules can be injected cleanly without altering the core scraping logic, re
 ## Requirements
 
 - Python 3.10+
-- Google Chrome (latest version)
+- Google Chrome
 - **Chromedriver** (must match your Chrome version)
 - Selenium
 
