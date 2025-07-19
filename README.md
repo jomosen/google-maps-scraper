@@ -1,11 +1,11 @@
-# 🗺️ Google Maps Scraper
+# Google Maps Scraper
 
 A modular and extensible scraper built with Python and Selenium for extracting business data from Google Maps.  
 Designed with clean architecture principles, SOLID design, and separation of concerns.
 
 ---
 
-## 🚀 What It Does
+## What it does
 
 This scraper automates Google Maps searches to extract business information such as:
 
@@ -22,34 +22,34 @@ Results are stored in a CSV file.
 
 ---
 
-## 🧱 Architecture Overview
+## Architecture overview
 
 - `BaseScraper`: Abstract base class that defines the scraping contract.
 - `SeleniumDriver`: Encapsulates all Selenium-related actions and stealth setup.
 - `GoogleMapsScraper`: Concrete implementation for Google Maps scraping.
-- `ResultsStore`: In-memory result buffer, shared across components.
-- `CSVWriter`: Repository that handles CSV persistence.
+- `Repository`: Abstraction that defines the persistence contract. Can be implemented for different storage backends (e.g., in-memory, database, file system).
+- `CSVWriter`: Concrete Repository implementation that persists results to a CSV file.
 
 ---
 
-## 🧩 Extensible by Design
+## Extensible by design
 
 The architecture is designed to support additional scraper implementations and enrich business data with external sources.
 
 Some future plug-ins/extensions might include:
 
-- 🔍 **Email extractor**: to crawl websites and collect contact information
-- 📱 **Social media scrapers**: to retrieve public Instagram, Facebook or LinkedIn profiles
-- 🧠 **NLP or AI modules**: to classify or enrich business descriptions
+- **Email extractor**: to crawl websites and collect contact information
+- **Social media scrapers**: to retrieve public Instagram, Facebook or LinkedIn profiles
+- **NLP or AI modules**: to classify or enrich business descriptions
 
 New modules can be injected cleanly without altering the core scraping logic, respecting the current separation of concerns.
 
 ---
 
-## ⚙️ Requirements
+## Requirements
 
 - Python 3.10+
-- Google Chrome (latest version)
+- Google Chrome
 - **Chromedriver** (must match your Chrome version)
 - Selenium
 
@@ -61,7 +61,7 @@ pip install -r requirements.txt
 
 ---
 
-## 🔧 Downloading Chromedriver
+## Downloading Chromedriver
 
 To run the scraper, you need to download Chromedriver and place it in your project directory or somewhere in your system PATH.
 
@@ -75,13 +75,13 @@ To run the scraper, you need to download Chromedriver and place it in your proje
 
         - Place it in your project root directory (recommended), or
 
-        - Add its path to your system’s PATH environment variable.
+        - Set the CHROMEDRIVER_PATH variable in your .env file to its full path.
 
 If placed in the project root, the scraper will automatically detect and launch it.
 
 ---
 
-## 🧪 Running the Scraper
+## Running the scraper
 
 ### Single query
 
