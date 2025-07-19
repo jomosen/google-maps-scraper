@@ -154,7 +154,7 @@ class GoogleMapsScraper(BaseScraper):
     
     def get_reviews(self, detail_panel):
         reviews = []
-        if self.max_reviews and self.max_reviews > 0:
+        if self.max_reviews > 3:
             reviews = self.get_reviews_from_reviews_tab(detail_panel)
         else:
             reviews = self.get_reviews_from_overview_tab(detail_panel)

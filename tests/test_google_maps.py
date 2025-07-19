@@ -13,7 +13,7 @@ def scraper_instance():
 
     selenium_driver = SeleniumDriver()
 
-    return GoogleMapsScraper(lang="en", queries=["boat rental in javea"], repository=repository, driver=selenium_driver)
+    return GoogleMapsScraper(lang="en", queries=["boat rental in javea"], repository=repository, driver=selenium_driver, max_reviews=3)
 
 def test_single_query(scraper_instance):
 

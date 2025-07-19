@@ -13,10 +13,7 @@ def main():
 
     args = parser.parse_args()
 
-    if args.max_reviews:
-        max_reviews = 50
-    else:
-        max_reviews = 3
+    max_reviews = 50 if args.max_reviews else 3
 
     file_path = f"results/{Utils.sanitize_filename(args.query)}.csv"
     repository = CSVWriter(file_path)

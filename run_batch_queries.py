@@ -15,10 +15,7 @@ def main():
 
     args = parser.parse_args()
 
-    if args.max_reviews:
-        max_reviews = 50
-    else:
-        max_reviews = 3
+    max_reviews = 50 if args.max_reviews else 3
 
     with open(args.json, 'r', encoding='utf-8') as f:
         queries = json.load(f)
