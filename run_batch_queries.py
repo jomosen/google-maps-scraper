@@ -1,7 +1,6 @@
 import argparse
 import json
 
-from scraper.results_storage import ResultsStorage
 from scraper.csv_writer import CSVWriter
 from scraper.selenium_driver import SeleniumDriver
 from scraper.google_maps import GoogleMapsScraper
@@ -17,9 +16,9 @@ def main():
     args = parser.parse_args()
 
     if args.max_reviews:
-        reviews_limit = 50
+        max_reviews = 50
     else:
-        reviews_limit = None
+        max_reviews = 3
 
     with open(args.json, 'r', encoding='utf-8') as f:
         queries = json.load(f)
@@ -36,7 +35,7 @@ def main():
 
     selenium_driver = SeleniumDriver()
 
-    scraper = GoogleMapsScraper(lang=lang, queries=queries, repository=repository, driver=selenium_driver, max_reviews=reviews_limit)
+    scraper = GoogleMapsScraper(lang=lang, queries=queries, repository=repository, driver=selenium_driver, max_reviews=max_reviews)
     scraper.scrape()
 
 if __name__ == "__main__":

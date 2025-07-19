@@ -1,6 +1,7 @@
 import os
 import time
 import random
+import platform
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -19,16 +20,16 @@ class SeleniumDriver():
         self.driver = self.get_stealth_driver(options)
 
     def get_stealth_driver(self, options):
-        chromedriver_path = os.getenv("CHROMEDRIVER_PATH", "./chromedriver.exe")
+        chromedriver_filename = "chromedriver.exe" if platform.system() == "Windows" else "chromedriver"
+        chromedriver_path = os.getenv("CHROMEDRIVER_PATH", f"./{chromedriver_filename}")
 
         if not os.path.exists(chromedriver_path):
             raise FileNotFoundError(
-                f"ChromeDriver not found in {chromedriver_path}. "
-                "Please set the CHROMEDRIVER_PATH environment variable "
-                "or place chromedriver.exe in the root of the project."
+                f"ChromeDriver not found at {chromedriver_path}.\n"
+                "Please set the CHROMEDRIVER_PATH environment variable, "
+                "or place the appropriate chromedriver binary in the root of the project.\n"
+                f"(Expected: {chromedriver_filename})"
             )
-    
-        
         
         options.add_argument("--disable-blink-features=AutomationControlled")
         options.add_experimental_option("excludeSwitches", ["enable-automation"])

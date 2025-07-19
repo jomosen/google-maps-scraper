@@ -9,7 +9,7 @@ from scraper.utils import Utils
 from . import selectors
 
 class GoogleMapsScraper(BaseScraper):
-    def __init__(self, lang, queries, repository, driver, max_reviews=None):
+    def __init__(self, lang, queries, repository, driver, max_reviews):
         super().__init__(repository, driver)
         self.lang = lang
         self.queries = queries
@@ -41,20 +41,15 @@ class GoogleMapsScraper(BaseScraper):
         self.driver.click_element_when_present(selectors.ACCEPT_COOKIES_BTN_SELECTOR)
 
     def search(self, query):
-        print(f"Searching for: {query}")
         self.driver.send_keys_after_waiting(selectors.SEARCH_BOX_SELECTOR, query)
-        print("Search submitted.")
 
     def scroll_listings(self):
-        print("Scrolling the sidebar to load all of the results...")
         self.driver.scroll_element(selectors.SIDEBAR_CONTAINER_SELECTOR)
-        print("Finished scrolling.")
         
     def extract_listings_data(self, query):
         listings = self.get_listings()
         for i, listing in enumerate(listings):
             try:
-                print(f"Clicking listing {i+1} of {len(listings)}")
                 self.extract_listing_data(listing, query)
             except Exception as e:
                 print(f"Failed to process listing {i+1}: {e}")
@@ -101,7 +96,6 @@ class GoogleMapsScraper(BaseScraper):
             item['query'] = query
 
             self.repository.add(item)
-            print(f"Listing {item['name']} processed successfully.")
 
         except Exception as e:
             print(f"Failed to process listing: {e}")
@@ -148,7 +142,7 @@ class GoogleMapsScraper(BaseScraper):
             try:
                 attributes.append(item.get_attribute("aria-label"))
             except:
-                None
+                pass
         return json.dumps(attributes)
 
     def get_info(self, detail_panel):
@@ -192,7 +186,6 @@ class GoogleMapsScraper(BaseScraper):
                 reviews.append(review)
 
                 if self.max_reviews and len(reviews) >= self.max_reviews:
-                    print(f"Reached maximum reviews limit: {self.max_reviews}")
                     break
             except:
                 pass

@@ -1,6 +1,5 @@
 import argparse
 
-from scraper.results_storage import ResultsStorage
 from scraper.csv_writer import CSVWriter
 from scraper.selenium_driver import SeleniumDriver
 from scraper.google_maps import GoogleMapsScraper
@@ -15,16 +14,16 @@ def main():
     args = parser.parse_args()
 
     if args.max_reviews:
-        reviews_limit = 50
+        max_reviews = 50
     else:
-        reviews_limit = None
+        max_reviews = 3
 
     file_path = f"results/{Utils.sanitize_filename(args.query)}.csv"
     repository = CSVWriter(file_path)
     selenium_driver = SeleniumDriver()
 
     scrapers = [
-        GoogleMapsScraper(lang=args.lang, queries=[args.query], repository=repository, driver=selenium_driver, max_reviews=reviews_limit)
+        GoogleMapsScraper(lang=args.lang, queries=[args.query], repository=repository, driver=selenium_driver, max_reviews=max_reviews)
     ]
 
     for scraper in scrapers:
