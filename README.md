@@ -1,11 +1,11 @@
-# 🗺️ Google Maps Scraper
+# Google Maps Scraper
 
 A modular and extensible scraper built with Python and Selenium for extracting business data from Google Maps.  
 Designed with clean architecture principles, SOLID design, and separation of concerns.
 
 ---
 
-## 🚀 What It Does
+## What it does
 
 This scraper automates Google Maps searches to extract business information such as:
 
@@ -22,7 +22,7 @@ Results are stored in a CSV file.
 
 ---
 
-## 🧱 Architecture Overview
+## Architecture overview
 
 - `BaseScraper`: Abstract base class that defines the scraping contract.
 - `SeleniumDriver`: Encapsulates all Selenium-related actions and stealth setup.
@@ -32,7 +32,7 @@ Results are stored in a CSV file.
 
 ---
 
-## 🧩 Extensible by Design
+## 🧩 Extensible by design
 
 The architecture is designed to support additional scraper implementations and enrich business data with external sources.
 
@@ -81,7 +81,7 @@ If placed in the project root, the scraper will automatically detect and launch 
 
 ---
 
-## 🧪 Running the Scraper
+## 🧪 Running the scraper
 
 ### Single query
 
