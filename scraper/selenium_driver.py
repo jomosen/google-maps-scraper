@@ -2,6 +2,7 @@ import os
 import time
 import random
 import platform
+import undetected_chromedriver as uc
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
