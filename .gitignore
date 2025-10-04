@@ -215,4 +215,4 @@ chromedriver.exe
 results/
 
 # Database files
-*.db
+scraping.db
