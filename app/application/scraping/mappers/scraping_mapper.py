@@ -21,6 +21,7 @@ class ScrapingMapper:
             id=model.id,
             options=options,
             created_at=model.created_at,
+            completed_at=model.completed_at,
             status=StatusVO(model.status),
             tasks=[TaskMapper.to_entity(task) for task in model.tasks]
         )
@@ -32,7 +33,8 @@ class ScrapingMapper:
             language=entity.options.language,
             max_reviews=entity.options.max_reviews,
             status=entity.status.value,
-            created_at=entity.created_at
+            created_at=entity.created_at,
+            completed_at=entity.completed_at
         )
 
         model.tasks = [TaskMapper.to_model(task) for task in entity.tasks]

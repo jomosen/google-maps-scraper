@@ -213,3 +213,6 @@ chromedriver.exe
 
 # Results
 results/
+
+# Database files
+*.db

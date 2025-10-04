@@ -11,7 +11,8 @@ class TaskMapper:
             keyword=model.keyword,
             location=model.location,
             status=StatusVO(model.status),
-            created_at=model.created_at
+            created_at=model.created_at,
+            completed_at=model.completed_at
         )
 
     @staticmethod
@@ -22,7 +23,8 @@ class TaskMapper:
             keyword=entity.keyword,
             location=entity.location,
             status=entity.status.value,
-            created_at=entity.created_at
+            created_at=entity.created_at,
+            completed_at=entity.completed_at
         )
     
     @staticmethod

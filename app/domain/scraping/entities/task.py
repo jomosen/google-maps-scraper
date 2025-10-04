@@ -28,3 +28,4 @@ class Task:
 
     def mark_completed(self):
         self.status = StatusVO.completed()
+        self.completed_at = datetime.utcnow()

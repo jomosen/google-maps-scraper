@@ -8,8 +8,5 @@ def run_scraper(scraper: GMapsScraper):
     if scraper.scraping is None:
         raise ValueError(f"Scraping with not found")
 
-    if scraper.scraping.is_completed():
-        return scraper
-
     scraper.run()
     return scraper

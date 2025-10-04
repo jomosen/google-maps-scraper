@@ -31,5 +31,58 @@ class BrowserDriver(ABC):
     def close(self):
         pass
 
-    def sleep(self, seconds: int):
-        time.sleep(seconds)
+    @abstractmethod
+    def get_elements(self, selector_value):
+        pass
+
+    @abstractmethod
+    def get_element(self, selector_value):
+        pass
+
+    @abstractmethod
+    def get_element_attribute(self, selector_value, attribute):
+        pass
+
+    @abstractmethod
+    def get_element_text(self, selector_value):
+        pass
+
+    @abstractmethod
+    def get_elements_within_parent(self, parent, element_selector_value):
+        pass
+
+    @abstractmethod
+    def get_element_within_parent(self, parent, element_selector_value):
+        pass
+
+    @abstractmethod
+    def get_element_attribute_within_parent(self, parent, element_selector_value, attribute):
+        pass
+
+    @abstractmethod
+    def get_element_text_within_parent(self, parent, element_selector_value):
+        pass
+
+    @abstractmethod
+    def click_element_when_present(self, selector_value):
+        pass
+
+    @abstractmethod
+    def send_keys_after_waiting(self, selector_value, input_value):
+        pass
+
+    @abstractmethod
+    def scroll_element(self, selector_value, number_of_times=100, selector_type=None):
+        pass
+
+    @abstractmethod
+    def scroll_element_by_xpath(self, xpath_value, number_of_times=100):
+        pass
+
+    @abstractmethod
+    def get_parents_of_elements(self, selector_value):
+        pass
+
+    @abstractmethod
+    def scroll_until_element_into_view(self, element):
+        pass

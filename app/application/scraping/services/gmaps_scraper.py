@@ -1,3 +1,5 @@
+import time
+import random
 from app.domain.scraping.interfaces.browser_driver import BrowserDriver
 from app.domain.scraping.entities.task import Task
 from app.domain.scraping.entities.scraping import Scraping
@@ -6,6 +8,7 @@ from app.domain.scraping.repositories.scraping_repository import ScrapingReposit
 from app.domain.place.repositories.place_repository import PlaceRepository
 from app.infrastructure.scraping.gmaps import selectors
 from app.application.scraping.mappers.task_mapper import TaskMapper
+from app.application.place.services.places_extractor import PlacesExtractor
 
 class GMapsScraper:
     def __init__(
@@ -27,8 +30,6 @@ class GMapsScraper:
     def _run_task(self, task: Task) -> list[Place]:
         places = []
 
-        self._close_cookies_dialog()
-
         if task.is_completed():
             return places
     
@@ -36,7 +37,8 @@ class GMapsScraper:
 
         self._scroll_until_end()
 
-        # Extract places
+        places_extractor = PlacesExtractor(self.browser_driver, self.place_repository, self.scraping.options.max_reviews)
+        places = places_extractor.extract_places(task.id)
 
         return places
     
@@ -56,6 +58,11 @@ class GMapsScraper:
         
         self._open_gmaps()
 
+        self._close_cookies_dialog()
+
+        i = 0
+        number_of_tasks_until_next_long_wait = random.randint(2, 6)
+
         for task in self.scraping.tasks:
             if task.status.pending():
                 places = self._run_task(task)
@@ -64,6 +71,10 @@ class GMapsScraper:
                     self.place_repository.save(place)
 
                 task.mark_completed()
+
+                i += 1
+                if i >= number_of_tasks_until_next_long_wait:
+                    time.sleep(random.randint(60, 120))
 
         self.scraping.mark_completed()
         self.scraping_repository.save(self.scraping)

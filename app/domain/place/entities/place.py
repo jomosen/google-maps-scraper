@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Optional, List, Type
 
-from app.domain.place.value_objects.metadata_vo import MetadataVO
+from app.domain.place.value_objects.attributes_vo import AttributesVO
 from app.domain.place.value_objects.hours_vo import HoursVO
 from app.domain.place.value_objects.reviews_vo import ReviewsVO
 #from app.domain.place.interfaces.place_enrichment import PlaceEnrichment
@@ -22,10 +22,11 @@ class Place:
     booking_url: Optional[str] = None
     domain: Optional[str] = None
     main_image: Optional[str] = None
-    meta_data: Optional[MetadataVO] = None
+    attributes: Optional[AttributesVO] = None
     description: Optional[str] = None
     hours: Optional[HoursVO] = None
     reviews: Optional[ReviewsVO] = None
+    task_id: Optional[str] = None
 
     # enrichments: List[PlaceEnrichment] = field(default_factory=list)
 

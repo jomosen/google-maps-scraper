@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime
 from dataclasses import dataclass, field
-from typing import List
+from typing import List, Optional
 from app.domain.scraping.entities.task import Task
 from app.domain.scraping.value_objects.status_vo import StatusVO
 from app.domain.scraping.value_objects.scraping_options_vo import ScrapingOptionsVO
@@ -11,6 +11,7 @@ class Scraping:
     id: str
     options: ScrapingOptionsVO
     created_at: datetime = field(default_factory=datetime.utcnow)
+    completed_at: Optional[datetime] = None
     status: StatusVO = field(default_factory=lambda: StatusVO.pending())
     tasks: List[Task] = field(default_factory=list)
 
@@ -28,3 +29,4 @@ class Scraping:
 
     def mark_completed(self):
         self.status = StatusVO.completed()
+        self.completed_at = datetime.utcnow()

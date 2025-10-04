@@ -4,8 +4,7 @@ from app.infrastructure.persistence.base import Base
 class PlaceModel(Base):
     __tablename__ = "places"
 
-    id = Column(Integer, primary_key=True)
-    place_id = Column(String, unique=True, nullable=False)
+    place_id = Column(String, primary_key=True, nullable=False)
     name = Column(String)
     address = Column(String)
     num_reviews = Column(Integer)
@@ -18,7 +17,8 @@ class PlaceModel(Base):
     booking_url = Column(String)
     main_image = Column(String)
     domain = Column(String)
-    meta_data = Column(JSON)
+    attributes = Column(JSON)
     description = Column(JSON)
     hours = Column(JSON)
     reviews = Column(JSON)
+    task_id = Column(String(36), nullable=False)  # Foreign key to TaskModel.id

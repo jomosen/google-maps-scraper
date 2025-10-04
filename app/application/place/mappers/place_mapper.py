@@ -18,10 +18,11 @@ class PlaceMapper:
             booking_url=model.booking_url,
             main_image=model.main_image,
             domain=model.domain,
-            metadata=model.meta_data,
+            attributes=model.attributes,
             description=model.description,
             hours=model.hours,
-            reviews=model.reviews
+            reviews=model.reviews,
+            task_id=model.task_id
         )
 
     @staticmethod
@@ -40,8 +41,9 @@ class PlaceMapper:
             booking_url=entity.booking_url,
             main_image=entity.main_image,
             domain=entity.domain,
-            meta_data=entity.meta_data,
+            attributes=entity.attributes,
             description=entity.description,
             hours=entity.hours,
-            reviews=entity.reviews
+            reviews=entity.reviews,
+            task_id=entity.task_id
         )

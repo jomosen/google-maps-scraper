@@ -13,10 +13,10 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 def main():
-    keywords = ["boat rental"]
-    locations = ["javea"]
+    keywords = ["junkyards"]
+    locations = ["houston, tx", "san antonio, tx", "dallas, tx", "austin, tx", "fort worth, tx"]
     language = "en"
-    max_reviews = 3
+    max_reviews = 10
 
     scraping_options = ScrapingOptionsVO(
         keywords=keywords,
