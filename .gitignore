@@ -213,3 +213,4 @@ tmp/*
 !tmp/.gitkeep
 
 .vscode/
+*.code-workspace
