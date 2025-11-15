@@ -1,4 +1,4 @@
-from src.geonames.infrastructure.persistence.models.abstract_geoname_model import AbstractGeoNameModel
+from geonames.infrastructure.persistence.models.abstract_geoname_model import AbstractGeoNameModel
 
 
 class GeoNameModel(AbstractGeoNameModel):
