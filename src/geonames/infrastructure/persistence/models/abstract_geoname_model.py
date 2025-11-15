@@ -7,7 +7,7 @@ from sqlalchemy import (
     Date,
     TIMESTAMP,
 )
-from src.geonames.infrastructure.persistence.database.base import Base
+from geonames.infrastructure.persistence.database.base import GeoNamesBase as Base
 
 
 class AbstractGeoNameModel(Base):

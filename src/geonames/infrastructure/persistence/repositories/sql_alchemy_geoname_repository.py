@@ -18,7 +18,7 @@ class SqlAlchemyGeoNameRepository(AbstractGeoNameRepository):
 
     def find_by_id(self, geoname_id: int) -> Optional[GeoName]:
         record = self.session.get(self.model_class, geoname_id)
-        return GeoNamePersistenceMapper.to_entity(record, model_class=self.model_class) if record else None
+        return GeoNamePersistenceMapper.to_entity(record) if record else None
 
     def find_all(self, filters: Optional[Dict] = None) -> List[GeoName]:
         filters = filters or {}
@@ -47,7 +47,7 @@ class SqlAlchemyGeoNameRepository(AbstractGeoNameRepository):
         if "timezone" in filters and filters["timezone"]:
             query = query.filter(self.model_class.timezone == filters["timezone"])
 
-        return [GeoNamePersistenceMapper.to_entity(r, model_class=self.model_class) for r in query.all()]
+        return [GeoNamePersistenceMapper.to_entity(r) for r in query.all()]
     
     def save(self, entity: GeoName) -> None:
         model = GeoNamePersistenceMapper.to_model(entity, model_class=self.model_class)

@@ -6,11 +6,11 @@ import mmap
 from pathlib import Path
 from dotenv import load_dotenv
 from typing import Generator, TypeVar
-from src.geonames.application.contracts.abstract_file_downloader import AbstractFileDownloader
-from src.geonames.application.contracts.abstract_geonames_importer import AbstractGeoNamesImporter
-from src.geonames.application.contracts.abstract_logger import AbstractLogger
-from src.geonames.infrastructure.services.mappers.abstract_file_row_mapper import AbstractFileRowMapper
-from src.geonames.infrastructure.services.exceptions.zip_unpack_error import ZipUnpackError
+from shared.application.contracts.abstract_file_downloader import AbstractFileDownloader
+from geonames.application.contracts.abstract_geonames_importer import AbstractGeoNamesImporter
+from shared.application.contracts.abstract_logger import AbstractLogger
+from geonames.infrastructure.services.mappers.abstract_file_row_mapper import AbstractFileRowMapper
+from shared.infrastructure.services.exceptions.zip_unpack_error import ZipUnpackError
 
 T = TypeVar("T")
 

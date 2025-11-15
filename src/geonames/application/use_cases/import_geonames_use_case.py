@@ -1,12 +1,12 @@
 from typing import Generator, Tuple, Iterator
-from src.geonames.application.contracts.abstract_logger import AbstractLogger
-from src.geonames.application.contracts.abstract_geonames_importer import AbstractGeoNamesImporter
-from src.geonames.application.use_cases.base_use_case import BaseUseCase
-from src.geonames.domain.geoname import GeoName
-from src.geonames.domain.abstract_geoname_repository import AbstractGeoNameRepository
+from shared.application.contracts.abstract_logger import AbstractLogger
+from geonames.application.contracts.abstract_geonames_importer import AbstractGeoNamesImporter
+from shared.application.contracts.abstract_use_case import AbstractUseCase
+from geonames.domain.geoname import GeoName
+from geonames.domain.abstract_geoname_repository import AbstractGeoNameRepository
 
 
-class ImportGeoNamesUseCase(BaseUseCase):
+class ImportGeoNamesUseCase(AbstractUseCase):
 
     def __init__(self, 
                  repository: AbstractGeoNameRepository, 

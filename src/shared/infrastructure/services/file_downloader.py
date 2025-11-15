@@ -1,8 +1,8 @@
 import requests
 from contextlib import nullcontext
-from src.geonames.infrastructure.services.exceptions.file_download_error import FileDownloadError
-from src.geonames.application.contracts.abstract_progress_bar import AbstractProgressBar
-from src.geonames.application.contracts.abstract_file_downloader import AbstractFileDownloader
+from shared.infrastructure.services.exceptions.file_download_error import FileDownloadError
+from shared.application.contracts.abstract_progress_bar import AbstractProgressBar
+from shared.application.contracts.abstract_file_downloader import AbstractFileDownloader
 
 
 class FileDownloader(AbstractFileDownloader):

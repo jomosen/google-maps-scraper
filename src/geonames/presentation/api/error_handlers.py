@@ -1,6 +1,6 @@
 from fastapi.responses import JSONResponse
 from fastapi import Request
-from domain.exceptions import InvalidGeoNameSelectionError
+from geonames.domain.exceptions import InvalidGeoNameSelectionError
 
 
 async def invalid_geoname_selection_handler(request: Request, exc: InvalidGeoNameSelectionError):

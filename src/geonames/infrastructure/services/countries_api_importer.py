@@ -3,9 +3,9 @@ import requests
 from dotenv import load_dotenv
 from typing import Generator, List, Dict, Any
 from functools import cached_property
-from src.geonames.application.contracts.abstract_geonames_importer import AbstractGeoNamesImporter
-from src.geonames.domain.country import Country
-from src.geonames.infrastructure.services.mappers.country_api_mapper import CountryApiMapper
+from geonames.application.contracts.abstract_geonames_importer import AbstractGeoNamesImporter
+from geonames.domain.country import Country
+from geonames.infrastructure.services.mappers.country_api_mapper import CountryApiMapper
 
 
 class CountriesApiImporter(AbstractGeoNamesImporter[Country]):

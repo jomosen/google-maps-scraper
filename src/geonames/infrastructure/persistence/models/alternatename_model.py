@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
-from src.geonames.infrastructure.persistence.database.base import Base
+from src.geonames.infrastructure.persistence.database.base import GeoNamesBase as Base
 
 
 class AlternateNameModel(Base):

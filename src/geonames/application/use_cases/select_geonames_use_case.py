@@ -1,7 +1,7 @@
 from typing import Any, List
-from src.geonames.application.contracts.abstract_logger import AbstractLogger
-from src.geonames.domain.geoname import GeoName
-from src.geonames.domain.geoname_selection_service import GeoNameSelectionService
+from shared.application.contracts.abstract_logger import AbstractLogger
+from geonames.domain.geoname import GeoName
+from geonames.domain.geoname_selection_service import GeoNameSelectionService
 
 
 class SelectGeoNamesUseCase:

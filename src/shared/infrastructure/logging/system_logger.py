@@ -1,6 +1,6 @@
 import logging
 import os
-from src.geonames.application.contracts.abstract_logger import AbstractLogger
+from shared.application.contracts.abstract_logger import AbstractLogger
 
 log_level = os.getenv("LOG_LEVEL", "INFO").upper()
 logging.basicConfig(level=log_level, format='%(asctime)s - %(levelname)s - %(message)s')

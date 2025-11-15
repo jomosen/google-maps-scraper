@@ -1,12 +1,12 @@
 from abc import ABC, abstractmethod
-from typing import Optional, List, Dict
+from typing import Dict, List, Optional
 from src.geonames.domain.alternatename import AlternateName
 
 
 class AbstractAlternateNameRepository(ABC):
 
     @abstractmethod
-    def find_by_id(self, geoname_id: int) -> Optional[AlternateName]:
+    def find_by_id(self, alternate_name_id: int) -> Optional[AlternateName]:
         pass
 
     @abstractmethod

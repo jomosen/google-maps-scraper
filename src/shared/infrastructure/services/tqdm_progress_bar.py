@@ -1,6 +1,6 @@
 from typing import Iterable, Callable, Any
 from tqdm import tqdm
-from src.geonames.application.contracts.abstract_progress_bar import AbstractProgressBar
+from shared.application.contracts.abstract_progress_bar import AbstractProgressBar
 
 
 class TqdmProgressBar(AbstractProgressBar):

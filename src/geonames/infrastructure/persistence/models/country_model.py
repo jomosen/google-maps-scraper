@@ -7,7 +7,7 @@ from sqlalchemy import (
     DECIMAL,
     CHAR
 )
-from src.geonames.infrastructure.persistence.database.base import Base
+from geonames.infrastructure.persistence.database.base import GeoNamesBase as Base
 
 
 class CountryModel(Base):

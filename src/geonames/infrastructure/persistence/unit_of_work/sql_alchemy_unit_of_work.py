@@ -1,4 +1,4 @@
-from src.geonames.application.contracts.abstract_unit_of_work import AbstractUnitOfWork
+from shared.application.contracts.abstract_unit_of_work import AbstractUnitOfWork
 
 
 class SqlAlchemyUnitOfWork(AbstractUnitOfWork):
