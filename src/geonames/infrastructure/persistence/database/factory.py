@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 
 from shared.infrastructure.persistence.database.mysql_connector import MySQLConnector
-from geonames.infrastructure.persistence.database.base import GeoNamesBase
+from geonames.infrastructure.persistence.database.base import GeoNamesBase as Base
 
 load_dotenv()
 
@@ -14,6 +14,6 @@ def create_geonames_connector(init_schema: bool = False) -> MySQLConnector:
     if init_schema:
         import geonames.infrastructure.persistence.models
 
-        GeoNamesBase.metadata.create_all(bind=connector.engine)
+        Base.metadata.create_all(bind=connector.engine)
 
     return connector
