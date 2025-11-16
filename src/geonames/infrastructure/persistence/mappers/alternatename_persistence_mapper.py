@@ -1,6 +1,6 @@
 from typing import Optional
-from src.geonames.domain.alternatename import AlternateName
-from src.geonames.infrastructure.persistence.models.alternatename_model import AlternateNameModel
+from geonames.domain.alternatename import AlternateName
+from geonames.infrastructure.persistence.models.alternatename_model import AlternateNameModel
 
 
 class AlternateNamePersistenceMapper:

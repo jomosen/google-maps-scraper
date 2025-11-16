@@ -1,4 +1,4 @@
-from src.geonames.domain.country import Country
+from geonames.domain.country import Country
 
 
 class CountryApiMapper:

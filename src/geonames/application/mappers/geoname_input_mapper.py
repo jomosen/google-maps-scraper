@@ -1,4 +1,4 @@
-from src.geonames.domain.geoname import GeoName
+from geonames.domain.geoname import GeoName
 
 
 class GeoNameInputMapper:

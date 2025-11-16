@@ -1,8 +1,8 @@
 from datetime import date, datetime
 from decimal import Decimal
 from typing import Optional, Type, TypeVar
-from src.geonames.domain.geoname import GeoName
-from src.geonames.infrastructure.persistence.models.geoname_model import GeoNameModel
+from geonames.domain.geoname import GeoName
+from geonames.infrastructure.persistence.models.geoname_model import GeoNameModel
 
 
 class GeoNamePersistenceMapper:

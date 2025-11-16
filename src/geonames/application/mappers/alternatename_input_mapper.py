@@ -1,4 +1,4 @@
-from src.geonames.domain.alternatename import AlternateName
+from geonames.domain.alternatename import AlternateName
 
 
 class AlternateNameInputMapper:

@@ -1,7 +1,7 @@
 from typing import Optional
 from decimal import Decimal
-from src.geonames.domain.country import Country
-from src.geonames.infrastructure.persistence.models.country_model import CountryModel
+from geonames.domain.country import Country
+from geonames.infrastructure.persistence.models.country_model import CountryModel
 
 
 class CountryPersistenceMapper:

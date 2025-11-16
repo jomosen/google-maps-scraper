@@ -1,6 +1,6 @@
 from typing import List
-from src.geonames.domain.geoname import GeoName
-from src.geonames.application.dtos.geoname_dto import GeoNameDTO
+from geonames.domain.geoname import GeoName
+from geonames.application.dtos.geoname_dto import GeoNameDTO
 
 
 class GeoNameMapper:
