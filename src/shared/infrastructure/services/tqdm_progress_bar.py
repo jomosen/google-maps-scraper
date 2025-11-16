@@ -1,9 +1,9 @@
 from typing import Iterable, Callable, Any
 from tqdm import tqdm
-from shared.application.contracts.abstract_progress_bar import AbstractProgressBar
+from shared.application.ports.progress_bar_port import ProgressBarPort
 
 
-class TqdmProgressBar(AbstractProgressBar):
+class TqdmProgressBar(ProgressBarPort):
     """
     TQDM-based progress bar that can be fully customized.
     Accepts all tqdm arguments via **kwargs.

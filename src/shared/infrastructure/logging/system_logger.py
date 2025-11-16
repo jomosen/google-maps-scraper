@@ -1,11 +1,11 @@
 import logging
 import os
-from shared.application.contracts.abstract_logger import AbstractLogger
+from shared.application.ports.logger_port import LoggerPort
 
 log_level = os.getenv("LOG_LEVEL", "INFO").upper()
 logging.basicConfig(level=log_level, format='%(asctime)s - %(levelname)s - %(message)s')
 
-class SystemLogger(AbstractLogger):
+class SystemLogger(LoggerPort):
     
     def __init__(self):
         self._logger = logging.getLogger(__name__)
