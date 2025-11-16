@@ -1,14 +1,13 @@
 from typing import List, Optional, Dict
 from sqlalchemy.orm import Session
 from sqlalchemy import func, text
-from src.geonames.domain.abstract_country_geoname_repository import AbstractCountryGeoNameRepository
-from src.geonames.domain.country import Country
-from src.geonames.infrastructure.persistence.models.country_model import CountryModel
-from src.geonames.infrastructure.persistence.models.geoname_model import GeoNameModel
-from src.geonames.infrastructure.persistence.mappers.country_persistence_mapper import CountryPersistenceMapper
+from geonames.domain.repositories.country_geoname_repository import CountryGeoNameRepository
+from geonames.domain.country import Country
+from geonames.infrastructure.persistence.models.country_model import CountryModel
+from geonames.infrastructure.persistence.mappers.country_persistence_mapper import CountryPersistenceMapper
 
 
-class SqlAlchemyCountryGeoNameRepository(AbstractCountryGeoNameRepository):
+class SqlAlchemyCountryGeoNameRepository(CountryGeoNameRepository):
 
     def __init__(self, session: Session):
         self.session = session
@@ -20,15 +19,7 @@ class SqlAlchemyCountryGeoNameRepository(AbstractCountryGeoNameRepository):
     def find_all(self, filters: Optional[Dict] = None) -> List[Country]:
         filters = filters or {}
 
-        query = (
-            self.session.query(
-                CountryModel,
-                func.count(GeoNameModel.geoname_id).label("geoname_count")
-            )
-            .outerjoin(GeoNameModel, GeoNameModel.country_code == CountryModel.iso_alpha2)
-            .group_by(CountryModel.iso_alpha2)
-            .order_by(CountryModel.country_name)
-        )
+        query = self.session.query(CountryModel)
 
         if "continent_code" in filters and filters["continent_code"]:
             query = query.filter(CountryModel.continent == filters["continent_code"])
@@ -42,15 +33,12 @@ class SqlAlchemyCountryGeoNameRepository(AbstractCountryGeoNameRepository):
         if "currency_code" in filters and filters["currency_code"]:
             query = query.filter(CountryModel.currency_code == filters["currency_code"])
 
-        results = query.all()
-
-        countries = []
-        for country_model, geoname_count in results:
-            country = CountryPersistenceMapper.to_entity(country_model)
-            country.has_geonames = geoname_count > 0
-            countries.append(country)
-
-        return countries
+        models = query.all()
+        entities = [
+            e for e in (CountryPersistenceMapper.to_entity(r) for r in models)
+            if e is not None
+        ]
+        return entities
 
     def save(self, entity: Country) -> None:
         model = CountryPersistenceMapper.to_model(entity)

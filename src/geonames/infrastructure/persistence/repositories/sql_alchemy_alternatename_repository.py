@@ -1,13 +1,13 @@
 from typing import List, Optional
 from sqlalchemy import text
 from sqlalchemy.orm import Session
-from src.geonames.domain.alternatename import AlternateName
-from src.geonames.domain.abstract_alternatename_repository import AbstractAlternateNameRepository
-from src.geonames.infrastructure.persistence.models.alternatename_model import AlternateNameModel
-from src.geonames.infrastructure.persistence.mappers.alternatename_persistence_mapper import AlternateNamePersistenceMapper
+from geonames.domain.alternatename import AlternateName
+from geonames.domain.repositories.alternatename_repository import AlternateNameRepository
+from geonames.infrastructure.persistence.models.alternatename_model import AlternateNameModel
+from geonames.infrastructure.persistence.mappers.alternatename_persistence_mapper import AlternateNamePersistenceMapper
 
 
-class SqlAlchemyAlternateNameRepository(AbstractAlternateNameRepository):
+class SqlAlchemyAlternateNameRepository(AlternateNameRepository):
 
     def __init__(self, session: Session):
         self.session = session
@@ -38,7 +38,11 @@ class SqlAlchemyAlternateNameRepository(AbstractAlternateNameRepository):
                 query = query.filter(AlternateNameModel.is_historic == filters["is_historic"])
 
         models = query.all()
-        return [AlternateNamePersistenceMapper.to_entity(model) for model in models]
+        entities = [
+            e for e in (AlternateNamePersistenceMapper.to_entity(r) for r in models)
+            if e is not None
+        ]
+        return entities
     
     def save(self, entity: AlternateName) -> None:
         model = AlternateNamePersistenceMapper.to_model(entity)

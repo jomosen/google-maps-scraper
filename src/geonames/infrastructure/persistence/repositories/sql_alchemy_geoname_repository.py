@@ -1,13 +1,13 @@
 from typing import Generic, List, Optional, Dict, Type, TypeVar
 from sqlalchemy import text
 from sqlalchemy.orm import Session
-from src.geonames.domain.abstract_geoname_repository import AbstractGeoNameRepository
-from src.geonames.domain.geoname import GeoName
-from src.geonames.infrastructure.persistence.models.geoname_model import GeoNameModel
-from src.geonames.infrastructure.persistence.mappers.geoname_persistence_mapper import GeoNamePersistenceMapper
+from geonames.domain.repositories.geoname_repository import GeoNameRepository
+from geonames.domain.geoname import GeoName
+from geonames.infrastructure.persistence.models.geoname_model import GeoNameModel
+from geonames.infrastructure.persistence.mappers.geoname_persistence_mapper import GeoNamePersistenceMapper
 
 
-class SqlAlchemyGeoNameRepository(AbstractGeoNameRepository):
+class SqlAlchemyGeoNameRepository(GeoNameRepository):
 
     def __init__(self, 
                  session: Session, 
@@ -47,7 +47,12 @@ class SqlAlchemyGeoNameRepository(AbstractGeoNameRepository):
         if "timezone" in filters and filters["timezone"]:
             query = query.filter(self.model_class.timezone == filters["timezone"])
 
-        return [GeoNamePersistenceMapper.to_entity(r) for r in query.all()]
+        models = query.all()
+        entities = [
+            e for e in (GeoNamePersistenceMapper.to_entity(r) for r in models)
+            if e is not None
+        ]
+        return entities
     
     def save(self, entity: GeoName) -> None:
         model = GeoNamePersistenceMapper.to_model(entity, model_class=self.model_class)
