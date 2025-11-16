@@ -1,14 +1,14 @@
 from typing import List, Any
-from src.geonames.domain.geoname import GeoName
-from src.geonames.domain.abstract_geoname_repository import AbstractGeoNameRepository
-from src.geonames.domain.abstract_country_geoname_repository import AbstractCountryGeoNameRepository
+from geonames.domain.geoname import GeoName
+from geonames.domain.repositories.geoname_repository import GeoNameRepository
+from geonames.domain.repositories.country_geoname_repository import CountryGeoNameRepository
 
 
 class GeoNameSelectionService:
     
     def __init__(self, 
-                 geoname_repository: AbstractGeoNameRepository, 
-                 country_repository: AbstractCountryGeoNameRepository):
+                 geoname_repository: GeoNameRepository, 
+                 country_repository: CountryGeoNameRepository):
         
         self.geoname_repository = geoname_repository
         self.country_repository = country_repository
