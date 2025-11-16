@@ -6,22 +6,22 @@ import mmap
 from pathlib import Path
 from dotenv import load_dotenv
 from typing import Generator, TypeVar
-from shared.application.contracts.abstract_file_downloader import AbstractFileDownloader
-from geonames.application.contracts.abstract_geonames_importer import AbstractGeoNamesImporter
-from shared.application.contracts.abstract_logger import AbstractLogger
+from shared.application.ports.file_downloader_port import FileDownloaderPort
+from geonames.application.ports.geonames_importer_port import GeoNamesImporterPort
+from shared.application.ports.logger_port import LoggerPort
 from geonames.infrastructure.services.mappers.abstract_file_row_mapper import AbstractFileRowMapper
 from shared.infrastructure.services.exceptions.zip_unpack_error import ZipUnpackError
 
 T = TypeVar("T")
 
 
-class AbstractGeoNamesFileImporter(AbstractGeoNamesImporter[T]):
+class AbstractGeoNamesFileImporter(GeoNamesImporterPort[T]):
 
     def __init__(self, 
                  download_url: str, 
-                 file_downloader: AbstractFileDownloader,
+                 file_downloader: FileDownloaderPort,
                  mapper: AbstractFileRowMapper, 
-                 logger: AbstractLogger | None = None):
+                 logger: LoggerPort | None = None):
 
         self.DOWNLOAD_URL = download_url
         self.file_downloader = file_downloader
