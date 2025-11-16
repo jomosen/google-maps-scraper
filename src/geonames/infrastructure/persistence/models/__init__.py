@@ -1,3 +1,0 @@
-from src.geonames.infrastructure.persistence.models.country_model import CountryModel
-from src.geonames.infrastructure.persistence.models.alternatename_model import AlternateNameModel
-from src.geonames.infrastructure.persistence.models.geoname_model import GeoNameModel
