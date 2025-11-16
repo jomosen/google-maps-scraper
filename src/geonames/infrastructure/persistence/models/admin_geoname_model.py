@@ -1,6 +1,6 @@
-from src.geonames.infrastructure.persistence.models.abstract_geoname_model import AbstractGeoNameModel
+from geonames.infrastructure.persistence.models.geonames_base_model import GeoNamesBaseModel
 
 
-class AdminGeoNameModel(AbstractGeoNameModel):
+class AdminGeoNameModel(GeoNamesBaseModel):
 
     __tablename__ = "admin_divisions"

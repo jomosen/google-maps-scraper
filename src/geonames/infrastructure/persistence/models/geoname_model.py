@@ -1,6 +1,6 @@
-from geonames.infrastructure.persistence.models.abstract_geoname_model import AbstractGeoNameModel
+from .geonames_base_model import GeoNamesBaseModel
 
 
-class GeoNameModel(AbstractGeoNameModel):
+class GeoNameModel(GeoNamesBaseModel):
 
     __tablename__ = "geonames"
