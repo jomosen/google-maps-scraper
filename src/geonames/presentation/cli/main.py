@@ -1,5 +1,4 @@
 from pyfiglet import Figlet
-from geonames.infrastructure.persistence.repositories.sql_alchemy_admin_geoname_repository import SqlAlchemyAdminGeoNameRepository
 from shared.infrastructure.logging.system_logger import SystemLogger
 from geonames.infrastructure.persistence.database.factory import create_geonames_connector
 from geonames.infrastructure.persistence.unit_of_work.sql_alchemy_unit_of_work_factory import SqlAlchemyUnitOfWorkFactory

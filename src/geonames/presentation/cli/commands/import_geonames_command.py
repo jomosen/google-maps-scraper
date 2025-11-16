@@ -1,14 +1,14 @@
 from typing import Any, Type
 from shared.infrastructure.services.file_downloader import FileDownloader
-from shared.application.contracts.abstract_logger import AbstractLogger
-from shared.application.contracts.abstract_unit_of_work_factory import AbstractUnitOfWorkFactory
-from shared.application.contracts.abstract_use_case import AbstractUseCase
+from shared.application.ports.logger_port import LoggerPort
+from geonames.application.ports.geonames_unit_of_work_port import GeoNamesUnitOfWorkPort
+from shared.application.use_case import UseCase
 from geonames.application.use_cases.import_geonames_use_case import ImportGeoNamesUseCase
 from shared.infrastructure.services.tqdm_progress_bar import TqdmProgressBar
 from geonames.presentation.cli.commands.build_geonames_import_tasks import build_geonames_import_tasks
 
 
-def import_geonames_command(uow_factory: AbstractUnitOfWorkFactory, logger: AbstractLogger | None = None):
+def import_geonames_command(uow_factory: GeoNamesUnitOfWorkPort, logger: LoggerPort | None = None):
 
     import_tasks = build_geonames_import_tasks(logger)
     
@@ -24,7 +24,7 @@ def import_geonames_command(uow_factory: AbstractUnitOfWorkFactory, logger: Abst
                 logger,
             )
 
-def _run_import(repository: Any, importer: Any, use_case_cls: Type[AbstractUseCase], description: str, logger: AbstractLogger | None = None):
+def _run_import(repository: Any, importer: Any, use_case_cls: Type[UseCase], description: str, logger: LoggerPort | None = None):
 
     use_case = use_case_cls(repository, importer)
 
