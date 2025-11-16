@@ -25,4 +25,3 @@ class Country:
     languages: Optional[str] = None
     neighbours: Optional[str] = None
     equivalent_fips_code: Optional[str] = None
-    has_geonames: Optional[bool] = None
