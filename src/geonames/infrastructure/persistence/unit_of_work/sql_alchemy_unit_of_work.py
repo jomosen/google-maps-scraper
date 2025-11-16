@@ -1,7 +1,7 @@
-from shared.application.contracts.abstract_unit_of_work import AbstractUnitOfWork
+from geonames.application.ports.geonames_unit_of_work_port import GeoNamesUnitOfWorkPort
 
 
-class SqlAlchemyUnitOfWork(AbstractUnitOfWork):
+class SqlAlchemyUnitOfWork(GeoNamesUnitOfWorkPort):
 
     def __init__(self, 
                  session_factory, 
