@@ -3,8 +3,6 @@ from enum import Enum
 
 class JobStatus(str, Enum):
     PENDING = "pending"
-    RUNNING = "running"
+    IN_PROGRESS = "in_progress"
     COMPLETED = "completed"
     FAILED = "failed"
-    PARTIAL_COMPLETED = "partial_completed"
-    CANCELLED = "cancelled"

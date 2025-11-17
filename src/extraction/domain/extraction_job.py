@@ -6,6 +6,7 @@ from datetime import datetime
 from .job_status import JobStatus
 from .job_config import JobConfig
 
+
 @dataclass
 class ExtractionJob:
     id: str
@@ -13,6 +14,7 @@ class ExtractionJob:
     status: JobStatus
     config: JobConfig
 
+    # Counters are OK if updated externally (via Application Service)
     total_tasks: int = 0
     completed_tasks: int = 0
     failed_tasks: int = 0
@@ -21,7 +23,7 @@ class ExtractionJob:
     started_at: datetime | None = None
     completed_at: datetime | None = None
     updated_at: datetime = field(default_factory=datetime.utcnow)
-
+    
     @staticmethod
     def create(title: str, config: JobConfig) -> ExtractionJob:
         return ExtractionJob(
@@ -30,52 +32,46 @@ class ExtractionJob:
             status=JobStatus.PENDING,
             config=config,
         )
+    
+    def mark_in_progress(self) -> None:
+        if self.status == JobStatus.COMPLETED:
+            raise ValueError("Cannot start a completed job.")
+        if self.status == JobStatus.FAILED:
+            raise ValueError("Cannot start a failed job.")
 
-    def add_task(self) -> None:
-        self.total_tasks += 1
+        self.status = JobStatus.IN_PROGRESS
+        self.started_at = datetime.utcnow()
         self.touch()
 
-    def register_task_completed(self) -> None:
-        self.completed_tasks += 1
-        self._recalculate_status()
-        self.touch()
+    def mark_completed(self) -> None:
+        if self.status != JobStatus.IN_PROGRESS:
+            raise ValueError("Cannot complete a job not in progress.")
 
-    def register_task_failed(self) -> None:
-        self.failed_tasks += 1
-        self._recalculate_status()
-        self.touch()
-
-    def _recalculate_status(self) -> None:
-        if self.total_tasks == 0:
-            return
-
-        processed = self.completed_tasks + self.failed_tasks
-
-        if processed < self.total_tasks:
-            if self.status == JobStatus.PENDING:
-                self.status = JobStatus.RUNNING
-            return
-
-        # All tasks processed
-        if self.failed_tasks == 0:
-            self.status = JobStatus.COMPLETED
-        else:
-            self.status = JobStatus.PARTIAL_COMPLETED
-
+        self.status = JobStatus.COMPLETED
         self.completed_at = datetime.utcnow()
+        self.touch()
+
+    def mark_failed(self) -> None:
+        if self.status == JobStatus.COMPLETED:
+            raise ValueError("Cannot fail a completed job.")
+
+        self.status = JobStatus.FAILED
+        self.completed_at = datetime.utcnow()
+        self.touch()
+        
+    def is_completed(self) -> bool:
+        return self.status == JobStatus.COMPLETED
+
+    def is_finished(self) -> bool:
+        return self.status in {
+            JobStatus.COMPLETED,
+            JobStatus.FAILED,
+        }
 
     def progress(self) -> float:
         if self.total_tasks == 0:
             return 0.0
         return (self.completed_tasks + self.failed_tasks) / self.total_tasks
-
-    def is_finished(self) -> bool:
-        return self.status in {
-            JobStatus.COMPLETED,
-            JobStatus.PARTIAL_COMPLETED,
-            JobStatus.FAILED,
-            JobStatus.CANCELLED,
-        }
 
     def touch(self) -> None:
         self.updated_at = datetime.utcnow()
