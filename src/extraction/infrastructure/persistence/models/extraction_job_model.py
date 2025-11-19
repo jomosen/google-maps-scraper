@@ -7,7 +7,7 @@ from sqlalchemy.orm import relationship, Mapped
 from extraction.infrastructure.persistence.database.base import ExtractionBase as Base
 
 if TYPE_CHECKING:
-    from .job_task_model import JobTaskModel
+    from .extraction_task_model import ExtractionTaskModel
 
 
 class ExtractionJobModel(Base):
@@ -30,7 +30,7 @@ class ExtractionJobModel(Base):
     completed_at = Column(DateTime, nullable=True)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-    tasks: Mapped[List["JobTaskModel"]] = relationship(
+    tasks: Mapped[List["ExtractionTaskModel"]] = relationship(
         "JobTaskModel",
         back_populates="job",
         cascade="all, delete-orphan"

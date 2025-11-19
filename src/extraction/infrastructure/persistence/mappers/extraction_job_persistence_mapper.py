@@ -1,8 +1,8 @@
 from extraction.domain.extraction_job import ExtractionJob
 from extraction.infrastructure.persistence.models.extraction_job_model import ExtractionJobModel
-from extraction.infrastructure.persistence.mappers.job_task_persistence_mapper import JobTaskPersistenceMapper
-from extraction.domain.job_status import JobStatus
-from extraction.domain.job_config import JobConfig
+from extraction.infrastructure.persistence.mappers.job_task_persistence_mapper import ExtractionTaskPersistenceMapper
+from extraction.domain.extraction_job_status import ExtractionJobStatus
+from extraction.domain.extraction_job_config import ExtractionJobConfig
 
 
 class ExtractionJobPersistenceMapper:
@@ -12,16 +12,16 @@ class ExtractionJobPersistenceMapper:
     def to_entity(model: ExtractionJobModel) -> ExtractionJob:
         """Converts a ExtractionJobModel to a ExtractionJob entity."""
 
-        config = JobConfig(**model.config)
+        config = ExtractionJobConfig(**model.config)
 
         return ExtractionJob(
             id=model.id,
             title=model.title,
-            status=JobStatus(model.status),
+            status=ExtractionJobStatus(model.status),
             config=config,
             created_at=model.created_at,
             completed_at=model.completed_at,
-            tasks=[JobTaskPersistenceMapper.to_entity(task) for task in model.tasks]
+            tasks=[ExtractionTaskPersistenceMapper.to_entity(task) for task in model.tasks]
         )
 
     @staticmethod
@@ -50,7 +50,7 @@ class ExtractionJobPersistenceMapper:
 
         model.tasks = []
         for task_entity in entity.tasks:
-            task_model = JobTaskPersistenceMapper.to_model(task_entity)
+            task_model = ExtractionTaskPersistenceMapper.to_model(task_entity)
             task_model.job = model
             model.tasks.append(task_model)
 

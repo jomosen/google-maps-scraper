@@ -1,10 +1,9 @@
 from typing import Any, Type
-from shared.infrastructure.services.file_downloader import FileDownloader
 from shared.application.ports.logger_port import LoggerPort
 from geonames.application.ports.geonames_unit_of_work_port import GeoNamesUnitOfWorkPort
 from shared.application.use_case import UseCase
 from geonames.application.use_cases.import_geonames_use_case import ImportGeoNamesUseCase
-from shared.infrastructure.services.tqdm_progress_bar import TqdmProgressBar
+from shared.infrastructure.adapters.tqdm_progress_bar import TqdmProgressBar
 from geonames.presentation.cli.commands.build_geonames_import_tasks import build_geonames_import_tasks
 
 

@@ -11,10 +11,10 @@ class SqlAlchemyUnitOfWorkFactory(UnitOfWorkFactoryPort):
     def __call__(self) -> SqlAlchemyUnitOfWork:
 
         from extraction.infrastructure.persistence.repositories.sql_alchemy_extraction_job_repository import SqlAlchemyExtractionJobRepository
-        from extraction.infrastructure.persistence.repositories.sql_alchemy_job_task_repository import SqlAlchemyJobTaskRepository
+        from extraction.infrastructure.persistence.repositories.sql_alchemy_job_task_repository import SqlAlchemyExtractionTaskRepository
         
         return SqlAlchemyUnitOfWork(
             session_factory=self.connector.get_session,
             extraction_job_repo_cls=SqlAlchemyExtractionJobRepository,
-            job_task_repo_cls=SqlAlchemyJobTaskRepository
+            job_task_repo_cls=SqlAlchemyExtractionTaskRepository
         )

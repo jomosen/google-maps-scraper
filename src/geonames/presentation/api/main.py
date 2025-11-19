@@ -1,14 +1,29 @@
 from fastapi import FastAPI
-from geonames.presentation.api import routes
-from geonames.presentation.api.error_handlers import invalid_geoname_selection_handler
-from geonames.domain.exceptions import InvalidGeoNameSelectionError
+from strawberry.fastapi import GraphQLRouter
+from geonames.presentation.api.rest import routes
+from geonames.presentation.api.graphql.schema import schema
 
-app = FastAPI(title="GeoNames API", version="1.0", debug=True)
 
-app.include_router(routes.router)
+def create_app() -> FastAPI:
+    """Application factory."""
+    app = FastAPI(
+        title="GeoNames API",
+        version="1.0",
+        debug=True,
+    )
 
-app.add_exception_handler(InvalidGeoNameSelectionError, invalid_geoname_selection_handler)
+    # REST routes
+    app.include_router(routes.router, prefix="/api")
 
-@app.get("/")
-def root():
-    return {"message": "The API is running"}
+    # GraphQL endpoint
+    app.include_router(GraphQLRouter(schema), prefix="/api/graphql")
+
+    # Root endpoint
+    @app.get("/")
+    def root():
+        return {"message": "The API is running"}
+
+    return app
+
+
+app = create_app()

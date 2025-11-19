@@ -21,8 +21,11 @@ class SqlAlchemyCountryGeoNameRepository(CountryGeoNameRepository):
 
         query = self.session.query(CountryModel)
 
-        if "continent_code" in filters and filters["continent_code"]:
-            query = query.filter(CountryModel.continent == filters["continent_code"])
+        if "iso_alpha2" in filters and filters["iso_alpha2"]:
+            query = query.filter(CountryModel.iso_alpha2 == filters["iso_alpha2"])
+
+        if "continent" in filters and filters["continent"]:
+            query = query.filter(CountryModel.continent == filters["continent"])
 
         if "min_population" in filters and filters["min_population"]:
             query = query.filter(CountryModel.population >= filters["min_population"])

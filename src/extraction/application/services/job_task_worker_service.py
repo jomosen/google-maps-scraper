@@ -1,10 +1,10 @@
 from typing import Callable, cast
 from extraction.application.ports.extraction_unit_of_work_port import ExtractionUnitOfWorkPort
-from extraction.domain.job_task import JobTask
-from extraction.domain.job_config import JobConfig
+from extraction.domain.extraction_task import JobTask
+from extraction.domain.extraction_job_config import ExtractionJobConfig
 from extraction.application.ports.place_extractor_port import PlaceExtractorPort
-from geonames.application.ports.geonames_lookup_port import GeoNamesLookupPort
-from places.application.ports.places_storage_port import PlacesStoragePort
+from extraction.application.ports.geonames_lookup_port import GeoNamesLookupPort
+from extraction.application.ports.places_storage_port import PlacesStoragePort
 from shared.application.ports.logger_port import LoggerPort
 
 
@@ -12,7 +12,7 @@ class JobTaskWorkerService:
     
     def __init__(self,
                  job_tasks: list[JobTask],
-                 job_config: JobConfig,
+                 job_config: ExtractionJobConfig,
                  place_extractor: PlaceExtractorPort,
                  geonames_lookup: GeoNamesLookupPort,
                  places_storage: PlacesStoragePort,

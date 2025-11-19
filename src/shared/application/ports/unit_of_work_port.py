@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from contextlib import AbstractContextManager
 
 
-class UnitOfWorkPort(AbstractContextManager):
+class UnitOfWorkPort(AbstractContextManager, ABC):
 
     @abstractmethod
     def __enter__(self) -> "UnitOfWorkPort":
@@ -18,4 +18,10 @@ class UnitOfWorkPort(AbstractContextManager):
 
     @abstractmethod
     def rollback(self) -> None:
+        raise NotImplementedError
+    
+class UnitOfWorkFactoryPort(ABC):
+
+    @abstractmethod
+    def __call__(self) -> "UnitOfWorkPort":
         raise NotImplementedError

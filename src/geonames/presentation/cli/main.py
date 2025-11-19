@@ -1,7 +1,7 @@
 from pyfiglet import Figlet
 from shared.infrastructure.logging.system_logger import SystemLogger
 from geonames.infrastructure.persistence.database.factory import create_geonames_connector
-from geonames.infrastructure.persistence.unit_of_work.sql_alchemy_unit_of_work_factory import SqlAlchemyUnitOfWorkFactory
+from geonames.infrastructure.persistence.unit_of_work.sql_alchemy_unit_of_work import SqlAlchemyUnitOfWorkFactory
 from geonames.presentation.cli.commands.import_geonames_command import import_geonames_command
 
 

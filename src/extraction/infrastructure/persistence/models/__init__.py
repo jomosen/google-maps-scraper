@@ -1,2 +1,2 @@
 from .extraction_job_model import ExtractionJobModel
-from .job_task_model import JobTaskModel
+from .extraction_task_model import ExtractionTaskModel

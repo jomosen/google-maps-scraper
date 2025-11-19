@@ -1,9 +1,12 @@
-from typing import List
+from typing import Type, TypeVar, List
+from pydantic import BaseModel
+
 from geonames.domain.geoname import GeoName
-from geonames.application.dtos.geoname_dto import GeoNameDTO
+from geonames.application.dto.geoname_dto import GeoNameDTO
 
+T = TypeVar("T")
 
-class GeoNameMapper:
+class GeoNameOutputMapper:
     """
     Maps domain GeoName entities to API DTOs (for FastAPI responses).
     """
@@ -36,4 +39,24 @@ class GeoNameMapper:
     @staticmethod
     def to_dto_list(entities: List[GeoName]) -> List[GeoNameDTO]:
         """Convert a list of GeoName entities to a list of GeoNameDTOs."""
-        return [GeoNameMapper.to_dto(entity) for entity in entities]
+        return [GeoNameOutputMapper.to_dto(entity) for entity in entities]
+    
+    @staticmethod
+    def to_graphql(type_cls: Type[T], entity: GeoName) -> T:
+        dto = GeoNameOutputMapper.to_dto(entity)
+        clean_dict = GeoNameOutputMapper._clean_dto_for_graphql(type_cls, dto)
+        return type_cls(**clean_dict)
+    
+    @staticmethod
+    def to_graphql_list(type_cls: Type[T], entities: List[GeoName]) -> List[T]:
+        dtos = GeoNameOutputMapper.to_dto_list(entities)
+        return [type_cls(**GeoNameOutputMapper._clean_dto_for_graphql(type_cls, d)) for d in dtos]
+    
+    @staticmethod
+    def _clean_dto_for_graphql(type_cls: Type[T], dto: GeoNameDTO) -> dict:
+        dto_dict = dto.model_dump()
+        return {
+            key: dto_dict[key]
+            for key in type_cls.__annotations__.keys()
+            if key in dto_dict
+        }

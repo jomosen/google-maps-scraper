@@ -3,16 +3,16 @@ import uuid
 from dataclasses import dataclass, field
 from datetime import datetime
 
-from .job_status import JobStatus
-from .job_config import JobConfig
+from .enums.extraction_job_status import ExtractionJobStatus
+from .value_objects.extraction_job_config import ExtractionJobConfig
 
 
 @dataclass
 class ExtractionJob:
     id: str
     title: str
-    status: JobStatus
-    config: JobConfig
+    status: ExtractionJobStatus
+    config: ExtractionJobConfig
 
     # Counters are OK if updated externally (via Application Service)
     total_tasks: int = 0
@@ -25,47 +25,47 @@ class ExtractionJob:
     updated_at: datetime = field(default_factory=datetime.utcnow)
     
     @staticmethod
-    def create(title: str, config: JobConfig) -> ExtractionJob:
+    def create(title: str, config: ExtractionJobConfig) -> ExtractionJob:
         return ExtractionJob(
             id=str(uuid.uuid4()),
             title=title,
-            status=JobStatus.PENDING,
+            status=ExtractionJobStatus.PENDING,
             config=config,
         )
     
     def mark_in_progress(self) -> None:
-        if self.status == JobStatus.COMPLETED:
+        if self.status == ExtractionJobStatus.COMPLETED:
             raise ValueError("Cannot start a completed job.")
-        if self.status == JobStatus.FAILED:
+        if self.status == ExtractionJobStatus.FAILED:
             raise ValueError("Cannot start a failed job.")
 
-        self.status = JobStatus.IN_PROGRESS
+        self.status = ExtractionJobStatus.IN_PROGRESS
         self.started_at = datetime.utcnow()
         self.touch()
 
     def mark_completed(self) -> None:
-        if self.status != JobStatus.IN_PROGRESS:
+        if self.status != ExtractionJobStatus.IN_PROGRESS:
             raise ValueError("Cannot complete a job not in progress.")
 
-        self.status = JobStatus.COMPLETED
+        self.status = ExtractionJobStatus.COMPLETED
         self.completed_at = datetime.utcnow()
         self.touch()
 
     def mark_failed(self) -> None:
-        if self.status == JobStatus.COMPLETED:
+        if self.status == ExtractionJobStatus.COMPLETED:
             raise ValueError("Cannot fail a completed job.")
 
-        self.status = JobStatus.FAILED
+        self.status = ExtractionJobStatus.FAILED
         self.completed_at = datetime.utcnow()
         self.touch()
         
     def is_completed(self) -> bool:
-        return self.status == JobStatus.COMPLETED
+        return self.status == ExtractionJobStatus.COMPLETED
 
     def is_finished(self) -> bool:
         return self.status in {
-            JobStatus.COMPLETED,
-            JobStatus.FAILED,
+            ExtractionJobStatus.COMPLETED,
+            ExtractionJobStatus.FAILED,
         }
 
     def progress(self) -> float:

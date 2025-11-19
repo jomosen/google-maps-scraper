@@ -1,23 +1,23 @@
 from sqlalchemy.orm import Session
-from extraction.domain.job_task import JobTask
-from extraction.domain.repositories.job_task_repository import JobTaskRepository
-from extraction.infrastructure.persistence.models.job_task_model import JobTaskModel
-from extraction.infrastructure.persistence.mappers.job_task_persistence_mapper import JobTaskPersistenceMapper
+from extraction.domain.extraction_task import ExtractionTask
+from extraction.domain.repositories.job_task_repository import ExtractionTaskRepository
+from extraction.infrastructure.persistence.models.extraction_task_model import ExtractionTaskModel
+from extraction.infrastructure.persistence.mappers.job_task_persistence_mapper import ExtractionTaskPersistenceMapper
 
 
-class SqlAlchemyJobTaskRepository(JobTaskRepository):
+class SqlAlchemyExtractionTaskRepository(ExtractionTaskRepository):
     """SQLAlchemy implementation of the TaskRepository interface."""
 
     def __init__(self, session: Session):
         self.session = session
 
-    def save(self, task: JobTask) -> None:
-        model = JobTaskPersistenceMapper.to_model(task)
+    def save(self, task: ExtractionTask) -> None:
+        model = ExtractionTaskPersistenceMapper.to_model(task)
         self.session.merge(model)
         self.session.commit()
 
-    def find_by_id(self, task_id: str) -> JobTask | None:
-        model = self.session.query(JobTaskModel).filter_by(id=task_id).first()
+    def find_by_id(self, task_id: str) -> ExtractionTask | None:
+        model = self.session.query(ExtractionTaskModel).filter_by(id=task_id).first()
         if model:
-            return JobTaskPersistenceMapper.to_entity(model)
+            return ExtractionTaskPersistenceMapper.to_entity(model)
         return None

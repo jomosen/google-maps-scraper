@@ -6,11 +6,11 @@ from extraction.application.ports.extraction_unit_of_work_port import Extraction
 from extraction.application.ports.place_extractor_port import PlaceExtractorPort
 from extraction.application.services.job_task_worker_service import JobTaskWorkerService
 from extraction.domain.extraction_job import ExtractionJob
-from extraction.domain.browser_driver_config import BrowserDriverConfig
-from extraction.domain.job_config import JobConfig
-from extraction.domain.job_task import JobTask
-from geonames.application.ports.geonames_lookup_port import GeoNamesLookupPort
-from places.application.ports.places_storage_port import PlacesStoragePort
+from extraction.domain.value_objects.browser_driver_config import BrowserDriverConfig
+from extraction.domain.extraction_job_config import ExtractionJobConfig
+from extraction.domain.extraction_task import JobTask
+from extraction.application.ports.geonames_lookup_port import GeoNamesLookupFactory
+from extraction.application.ports.places_storage_port import PlacesStoragePort
 from shared.application.ports.logger_port import LoggerPort
 
 
@@ -22,7 +22,7 @@ class ExtractionJobRunnerService:
                  browser_driver_config: BrowserDriverConfig,
                  place_extractor_class: type[PlaceExtractorPort],
                  extraction_uow_factory: Callable[[], ExtractionUnitOfWorkPort],
-                 geonames_lookup_port_class: type[GeoNamesLookupPort],
+                 geonames_lookup_factory: GeoNamesLookupFactory,
                  places_storage_port_class: type[PlacesStoragePort],
                  logger: LoggerPort | None = None):
         
@@ -31,7 +31,7 @@ class ExtractionJobRunnerService:
         self.browser_driver_config = browser_driver_config
         self.place_extractor_class = place_extractor_class
         self.extraction_uow_factory = extraction_uow_factory
-        self.geonames_lookup_port_class = geonames_lookup_port_class
+        self.geonames_lookup_factory = geonames_lookup_factory
         self.places_storage_port_class = places_storage_port_class
         self.logger = logger
 
@@ -81,7 +81,7 @@ class ExtractionJobRunnerService:
         chunks_without_empties = [chunk for chunk in chunks if len(chunk) > 0]
         return chunks_without_empties
     
-    def _execute_task(self, tasks: list[JobTask], job_config: JobConfig, worker_id: int):
+    def _execute_task(self, tasks: list[JobTask], job_config: ExtractionJobConfig, worker_id: int):
 
         try:
             browser_driver = self.browser_driver_class(config=self.browser_driver_config)
@@ -92,7 +92,8 @@ class ExtractionJobRunnerService:
                 logger=self.logger
             )
 
-            geonames_lookup = self.geonames_lookup_port_class()
+            geonames_lookup = self.geonames_lookup_factory()
+            
             places_storage = self.places_storage_port_class()
 
             worker = self.task_worker_service_class(

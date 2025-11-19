@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
-from extraction.domain.job_task import JobTask
+from extraction.domain.extraction_task import JobTask
 
 
-class JobTaskRepository(ABC):
+class ExtractionTaskRepository(ABC):
     
     @abstractmethod
     def save(self, job_task: JobTask) -> None:

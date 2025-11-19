@@ -1,30 +1,30 @@
-from extraction.domain.job_task import JobTask
-from extraction.infrastructure.persistence.models.job_task_model import JobTaskModel
-from extraction.domain.job_status import JobStatus
+from extraction.domain.extraction_task import ExtractionTask, JobTask
+from extraction.infrastructure.persistence.models.extraction_task_model import ExtractionTaskModel
+from extraction.domain.extraction_job_status import ExtractionJobStatus
 
 
-class JobTaskPersistenceMapper:
-    """Maps JobTask domain entities to and from persistence models."""
+class ExtractionTaskPersistenceMapper:
+    """Maps ExtractionTask domain entities to and from persistence models."""
 
     @staticmethod
-    def to_entity(model: JobTaskModel) -> JobTask:
-        """Converts a JobTaskModel to a JobTask entity."""
+    def to_entity(model: ExtractionTaskModel) -> ExtractionTask:
+        """Converts a ExtractionTaskModel to a ExtractionTask entity."""
 
-        return JobTask(
+        return ExtractionTask(
             id=model.id,
             job_id=model.job_id,
             search_seed=model.search_seed,
             geoname_id=model.geoname_id,
-            status=JobStatus(model.status),
+            status=ExtractionJobStatus(model.status),
             created_at=model.created_at,
             completed_at=model.completed_at
         )
 
     @staticmethod
-    def to_model(entity: JobTask) -> JobTaskModel:
-        """Converts a JobTask entity to a JobTaskModel."""
+    def to_model(entity: ExtractionTask) -> ExtractionTaskModel:
+        """Converts a ExtractionTask entity to a ExtractionTaskModel."""
 
-        return JobTaskModel(
+        return ExtractionTaskModel(
             id=entity.id,
             job_id=entity.job_id,
             search_seed=entity.search_seed,
