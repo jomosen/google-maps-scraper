@@ -7,7 +7,7 @@ from .base import ExtractionBase as Base
 load_dotenv()
 
 
-def create_extraction_connector(init_schema: bool = False) -> MySQLConnector:
+def create_db_extraction_connector(init_schema: bool = False) -> MySQLConnector:
     db_url = os.environ["EXTRACTION_DB_URL"]
     connector = MySQLConnector(db_url)
 

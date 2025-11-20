@@ -15,6 +15,7 @@ class CountryOutputMapper:
     def to_dto(entity: Country) -> CountryDTO:
         """Convert a single Country entity to a CountryDTO."""
         return CountryDTO(
+            geoname_id=entity.geoname_id,
             iso_alpha2=entity.iso_alpha2,
             iso_alpha3=getattr(entity, "iso_alpha3", None),
             iso_numeric=getattr(entity, "iso_numeric", None),
@@ -31,7 +32,6 @@ class CountryOutputMapper:
             postal_code_format=getattr(entity, "postal_code_format", None),
             postal_code_regex=getattr(entity, "postal_code_regex", None),
             languages=getattr(entity, "languages", None),
-            geoname_id=entity.geoname_id,
             neighbours=getattr(entity, "neighbours", None),
             equivalent_fips_code=getattr(entity, "equivalent_fips_code", None),
         )

@@ -23,10 +23,8 @@ class GeoNameQueryService:
             repo: GeoNameRepository = uow.geoname_repo
 
             geoname = repo.find_by_id(geoname_id)
-
             if not geoname:
                 raise GeoNameNotFoundError(geoname_id)
-
             return geoname
         
     def get_admin_geonames(self, filters: dict) -> List[GeoName]:
@@ -35,7 +33,6 @@ class GeoNameQueryService:
             repo: GeoNameRepository = uow.admin_geoname_repo
 
             geonames = repo.find_all(filters)
-
             return geonames
         
     def get_city_geonames(self, filters: dict) -> List[GeoName]:
@@ -44,8 +41,17 @@ class GeoNameQueryService:
             repo: GeoNameRepository = uow.city_geoname_repo
 
             geonames = repo.find_all(filters)
-
             return geonames
+        
+    def get_country(self, geoname_id: int):
+        with self.uow_factory() as uow:
+            uow = cast(GeoNamesUnitOfWorkPort, uow)
+            repo: CountryGeoNameRepository = uow.country_geoname_repo
+
+            country = repo.find_by_id(geoname_id)
+            if not country:
+                raise GeoNameNotFoundError(geoname_id)
+            return country
         
     def get_countries(self, filters: dict) -> List[Country]:
         with self.uow_factory() as uow:
@@ -53,5 +59,4 @@ class GeoNameQueryService:
             repo: CountryGeoNameRepository = uow.country_geoname_repo
 
             countries = repo.find_all(filters)
-
             return countries

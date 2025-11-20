@@ -6,11 +6,12 @@ from datetime import date
 class CountryDTO(BaseModel):
     """Data Transfer Object for Country entities (used in API responses)."""
 
+    geoname_id: int
     iso_alpha2: str
+    country_name: str
     iso_alpha3: Optional[str]
     iso_numeric: Optional[int]
     fips_code: Optional[str]
-    country_name: str
     capital: Optional[str]
     area_sqkm: Optional[float]
     population: Optional[int]
@@ -22,6 +23,5 @@ class CountryDTO(BaseModel):
     postal_code_format: Optional[str]
     postal_code_regex: Optional[str]
     languages: Optional[str]
-    geoname_id: int
     neighbours: Optional[str]
     equivalent_fips_code: Optional[str]

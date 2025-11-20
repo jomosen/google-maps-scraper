@@ -31,7 +31,7 @@ class ExtractionJobModel(Base):
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     tasks: Mapped[List["ExtractionTaskModel"]] = relationship(
-        "JobTaskModel",
+        "ExtractionTaskModel",
         back_populates="job",
         cascade="all, delete-orphan"
     )

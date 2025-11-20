@@ -14,7 +14,8 @@ class CountryModel(Base):
 
     __tablename__ = "countries"
 
-    iso_alpha2 = Column(CHAR(2), primary_key=True)
+    geoname_id = Column(Integer, primary_key=True)
+    iso_alpha2 = Column(CHAR(2), unique=True)
     iso_alpha3 = Column(CHAR(3))
     iso_numeric = Column(Integer)
     fips_code = Column(CHAR(2))
@@ -30,6 +31,5 @@ class CountryModel(Base):
     postal_code_format = Column(String(50))
     postal_code_regex = Column(String(200))
     languages = Column(String(200))
-    geoname_id = Column(Integer, unique=True, nullable=False)
     neighbours = Column(String(100))
     equivalent_fips_code = Column(String(10))

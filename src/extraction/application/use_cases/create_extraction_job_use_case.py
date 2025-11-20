@@ -1,46 +1,49 @@
-import uuid
-from datetime import datetime
 from typing import List
+from datetime import datetime
 
 from extraction.domain.extraction_job import ExtractionJob
-from app.domain.scraping.value_objects.job_config_vo import JobConfigVO
-from app.domain.scraping.repositories.i_job_repository import IJobRepository
-from app.domain.scraping.entities.job import Task
-from app.domain.geoname.services.geoname_selector_service import GeoNameSelectorService
+from extraction.domain.value_objects.extraction_job_config import ExtractionJobConfig
+from extraction.domain.repositories.extraction_job_repository import ExtractionJobRepository
+from extraction.domain.extraction_task import ExtractionTask
+from extraction.application.services.geoname_selection_service import GeoNameSelectionService
+
 
 class CreateExtractionJobUseCase:
-    """Service to create Scraping entities and generate associated tasks."""
 
-    def __init__(self, job_repository: IJobRepository, 
-                 geoname_selector_service: GeoNameSelectorService):
-        self.job_repository = job_repository
-        self.geoname_selector_service = geoname_selector_service
+    def __init__(self, 
+                 job_repo: ExtractionJobRepository, 
+                 geoname_selection_service: GeoNameSelectionService):
+        
+        self.job_repository = job_repo
+        self.geoname_selection_service = geoname_selection_service
 
-    def execute(self, title: str | None, config: JobConfigVO) -> Job:
-        job_id = str(uuid.uuid4())
-        title = title or job_id
+    def execute(self, config: ExtractionJobConfig, title: str | None = None) -> ExtractionJob:
 
-        job = Job.build(
+        if not title:
+            title = f"{config.search_seeds[0].title()} {config.geoname_selection_params.scope_geoname_name} {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}".capitalize()
+        
+        job = ExtractionJob.create(
             title=title,
             config=config,
         )
 
-        job.tasks = self._generate_tasks(job)
+        tasks = self._generate_tasks(job)
+
+        job.add_tasks(tasks)
 
         self.job_repository.save(job)
 
         return job
 
-    def _generate_tasks(self, job: Job) -> List[Task]:
-        """Generates tasks for the given scraping entity based on its options."""
+    def _generate_tasks(self, job: ExtractionJob) -> List[ExtractionTask]:
 
-        geonames = self.geoname_selector_service.select_geonames_for_config(job.config)
+        geonames = self.geoname_selection_service.select(job.config.geoname_selection_params)
 
         return [
-            Task.build(
+            ExtractionTask.create(
                 job_id=job.id,
                 search_seed=search_seed,
-                geoname_id=geoname.geoname_id
+                geoname=geoname
             )
             for geoname in geonames
             for search_seed in job.config.search_seeds

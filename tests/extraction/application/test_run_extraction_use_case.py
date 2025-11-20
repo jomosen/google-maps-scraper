@@ -2,7 +2,7 @@
 
 import pytest
 from unittest.mock import Mock
-from extraction.application.use_cases.run_extraction_job_use_case import RunExtractionUseCase
+from extraction.application.use_cases.run_extraction_job_use_case import RunExtractionJobUseCase
 from extraction.domain.extraction_job import ExtractionJob
 from extraction.domain.extraction_job_config import ExtractionJobConfig
 from extraction.domain.extraction_job_status import ExtractionJobStatus
@@ -30,7 +30,7 @@ def test_run_extraction_use_case_failure():
     # runner falla
     mock_runner.run.side_effect = Exception("boom")
 
-    use_case = RunExtractionUseCase(mock_runner, logger=None)
+    use_case = RunExtractionJobUseCase(mock_runner, logger=None)
 
     with pytest.raises(Exception):
         use_case.execute(job)

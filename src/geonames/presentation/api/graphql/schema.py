@@ -33,6 +33,12 @@ class Query:
         return GeoNameOutputMapper.to_graphql_list(GeoNameType, entities)
     
     @strawberry.field
+    def find_country_by_id(self, geoname_id: int) -> CountryType:
+        service = get_geoname_query_service()
+        entity: Country = service.get_country(geoname_id)
+        return CountryOutputMapper.to_graphql(CountryType, entity)
+    
+    @strawberry.field
     def find_countries(self, filters: CountryFiltersInput) -> List[CountryType]:
         service = get_geoname_query_service()
         entities: List[Country] = service.get_countries(vars(filters))

@@ -2,7 +2,7 @@ from typing import Protocol
 from extraction.domain.extracted_place import ExtractedPlace
 
 
-class PlacesStoragePort(Protocol):
+class PlaceStoragePort(Protocol):
     """
     Port for storing extracted Places into some persistence layer.
     Implementation could use SQL, NoSQL, files, etc.
@@ -21,5 +21,5 @@ class PlacesStorageFactory(Protocol):
     Workers call this to obtain thread-safe storage ports.
     """
 
-    def __call__(self) -> PlacesStoragePort:
+    def __call__(self) -> PlaceStoragePort:
         ...

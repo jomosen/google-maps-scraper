@@ -1,6 +1,6 @@
 from shared.application.ports.unit_of_work_port import UnitOfWorkPort
 from extraction.domain.repositories.extraction_job_repository import ExtractionJobRepository
-from extraction.domain.repositories.job_task_repository import ExtractionTaskRepository
+from extraction.domain.repositories.extraction_task_repository import ExtractionTaskRepository
 
 
 class ExtractionUnitOfWorkPort(UnitOfWorkPort):

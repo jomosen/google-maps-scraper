@@ -7,7 +7,7 @@ from geonames.infrastructure.persistence.database.base import GeoNamesBase as Ba
 load_dotenv()
 
 
-def create_geonames_connector(init_schema: bool = False) -> MySQLConnector:
+def create_db_geonames_connector(init_schema: bool = False) -> MySQLConnector:
     db_url = os.environ["GEONAMES_DB_URL"]
     connector = MySQLConnector(db_url)
 

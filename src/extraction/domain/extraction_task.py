@@ -6,6 +6,7 @@ from datetime import datetime
 from typing import Optional
 
 from .enums.extraction_task_status import ExtractionTaskStatus
+from .value_objects.geoname import GeoName
 
 
 @dataclass
@@ -18,10 +19,7 @@ class ExtractionTask:
     id: str
     job_id: str
     search_seed: str
-    search_point_name: str
-    search_point_latitude: float
-    search_point_longitude: float
-    search_point_country_code: str
+    geoname: GeoName
 
     status: ExtractionTaskStatus = ExtractionTaskStatus.PENDING
     attempts: int = 0
@@ -36,20 +34,14 @@ class ExtractionTask:
     def create(
         job_id: str,
         search_seed: str,
-        search_point_name: str,
-        search_point_latitude: float,
-        search_point_longitude: float,
-        search_point_country_code: str,
+        geoname: GeoName,
     ) -> ExtractionTask:
         """Factory method to create a new pending task."""
         return ExtractionTask(
             id=str(uuid.uuid4()),
             job_id=job_id,
             search_seed=search_seed,
-            search_point_name=search_point_name,
-            search_point_latitude=search_point_latitude,
-            search_point_longitude=search_point_longitude,
-            search_point_country_code=search_point_country_code,
+            geoname=geoname,
         )
     
     def mark_running(self) -> None:

@@ -28,10 +28,10 @@ class ExtractionTaskModel(Base):
     
     search_seed = Column(String(255), nullable=False)
     
-    search_point_name = Column(String(255), nullable=False)
-    search_point_latitude = Column(Float, nullable=False)
-    search_point_longitude = Column(Float, nullable=False)
-    search_point_country_code = Column(String(4), nullable=False)
+    geoname_name = Column(String(255), nullable=False)
+    geoname_latitude = Column(Float, nullable=False)
+    geoname_longitude = Column(Float, nullable=False)
+    geoname_country_code = Column(String(4), nullable=False)
     
     status = Column(String(30), nullable=False, default="pending")
     attempts = Column(Integer, nullable=False, default=0)
